@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap');
+
+Label, Button, TextArea, TableColumn, TextField{
+    -fx-font-family: 'Outfit', sans-serif;
+    -fx-border-radius:5px;
+    -fx-background-radius: 5px;
+}
+
+AnchorPane, VBox, HBox, BorderPane{
+    -fx-background-color: #fff;
+}
+
+label{
+    -fx-font-weight: bold;
+}
+
+TextField:focused{
+    -fx-background-radius: 5px;
+    -fx-border-color: #2e3a6e;
+    -fx-border-radius:5px;
+}
+
+Button{
+    -fx-background-color: #2e3a6e;
+    -fx-background-radius: 15px;
+    -fx-border-radius:15px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
