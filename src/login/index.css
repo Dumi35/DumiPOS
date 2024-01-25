@@ -10,9 +10,11 @@ AnchorPane, VBox, HBox, BorderPane{
     -fx-background-color: #fff;
 }
 
-label{
-    -fx-font-weight: bold;
-}
+/*Label{
+    -fx-font-weight: 700;
+    font-size: 50px;
+    font-size: 50px;
+}*/
 
 TextField:focused{
     -fx-background-radius: 5px;
