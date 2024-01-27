@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap');
+
+.sideBar{
+    -fx-background-color: #2e3a6e;
+}
+
+.searchBar{
+    -fx-border-radius:15px;
+    -fx-background-radius: 15px;
+}
+
+.card{
+    -fx-border-radius:15px;
+    -fx-border-color: none;
+    -fx-background-radius: 15px;
+    -fx-background-color: #fff;
+}
+
+Label, Button, TextArea, TableColumn, TextField, TableCell{
+    -fx-font-family: 'Outfit', sans-serif;
+    -fx-border-radius:5px;
+    -fx-background-radius: 5px;
+}
+
+TableColumn{
+    -fx-background-color: #fff;
+    -fx-border-color: #fff;
+}
+
+.table-cell {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.column-header {
+    -fx-background-color: #fff;
+}
+
+TableView{
+    -fx-border-color: white;
+}
+
+AnchorPane, VBox, HBox, BorderPane{
+    -fx-background-color: #fff;
+}
+
+/*Label{
+    -fx-font-weight: 700;
+    font-size: 50px;
+    font-size: 50px;
+}*/
+
+TextField:focused{
+    -fx-background-radius: 5px;
+    -fx-border-color: #2e3a6e;
+    -fx-border-radius:5px;
+}
+
+Button{
+    -fx-background-color: #2e3a6e;
+    -fx-background-radius: 15px;
+    -fx-border-radius:15px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.chart-plot-background{
+     -fx-background-color: none;
+}
+
+.chart-content { 
+    -fx-padding: 0px; /*remove space from axis to chart*/
+}
+
+.root:width {
+    -fx-background-color: 
+        #DDDDDD;
+}
+
+@media only screen and (min-device-width: 480px) and (max-device-width:1024px){
+    .sideBar{
+        -fx-background-color: red;
+    }
+
+}

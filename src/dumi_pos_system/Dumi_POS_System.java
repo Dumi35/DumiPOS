@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import POS_System_Classes.Hashing;
 import java.security.NoSuchAlgorithmException;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -16,13 +17,15 @@ public class Dumi_POS_System extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
         
         Scene scene = new Scene(root);
         stage.setTitle("Dumebi POS");
-        stage.resizableProperty().setValue(false);
+        //stage.resizableProperty().setValue(false);
         stage.centerOnScreen();
-        
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("../images/PAULogo.png")));
         stage.setScene(scene);
         stage.show();
     }
@@ -32,10 +35,10 @@ public class Dumi_POS_System extends Application {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException {
         launch(args);
-        String password = Hashing.generateRandomPassword(9);
-        String salt = Hashing.generateSalt();
-        String salted = Hashing.SaltPassword(password, salt);
-        Hashing.PepperPassword(salted); //final hashed password s returned here
+//        String password = Hashing.generateRandomPassword(9);
+//        String salt = Hashing.generateSalt();
+//        String salted = Hashing.SaltPassword(password, salt);
+//        Hashing.PepperPassword(salted); //final hashed password s returned here
     }
     
 }
