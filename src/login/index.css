@@ -1,7 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap');
+@font-face {
+    src: url("../fonts/Outfit-Regular.ttf");
+}
 
 Label, Button, TextArea, TableColumn, TextField{
-    -fx-font-family: 'Outfit', sans-serif;
+    -fx-font-family: 'Outfit Regular', sans-serif;
     -fx-border-radius:5px;
     -fx-background-radius: 5px;
 }

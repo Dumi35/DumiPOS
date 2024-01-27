@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap');
+
+
+@font-face {
+    src: url("../fonts/Outfit-Regular.ttf");
+}
+
 
 .sideBar{
     -fx-background-color: #2e3a6e;
@@ -16,10 +21,15 @@
     -fx-background-color: #fff;
 }
 
-Label, Button, TextArea, TableColumn, TextField, TableCell{
-    -fx-font-family: 'Outfit', sans-serif;
+Label, Button, TextArea, TableColumn, TextField, TableCell, ChoiceBox{
+    -fx-font-family: 'Outfit Regular', sans-serif;
     -fx-border-radius:5px;
     -fx-background-radius: 5px;
+}
+
+ChoiceBox{
+    -fx-background-color: #fff;
+    -fx-border-color:grey;
 }
 
 TableColumn{
@@ -47,11 +57,6 @@ AnchorPane, VBox, HBox, BorderPane{
     -fx-background-color: #fff;
 }
 
-/*Label{
-    -fx-font-weight: 700;
-    font-size: 50px;
-    font-size: 50px;
-}*/
 
 TextField:focused{
     -fx-background-radius: 5px;
@@ -66,6 +71,17 @@ Button{
     -fx-font-size: 14px;
     -fx-cursor: hand;
 }
+
+.Button-secondary{
+    -fx-background-color: #fff;
+    -fx-background-radius: 15px;
+    -fx-border-radius:15px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-text-fill:#2e3a6e;
+    -fx-border-color: #2e3a6e;
+}
+
 .chart-plot-background{
      -fx-background-color: none;
 }
@@ -73,6 +89,7 @@ Button{
 .chart-content { 
     -fx-padding: 0px; /*remove space from axis to chart*/
 }
+
 
 .root:width {
     -fx-background-color: 

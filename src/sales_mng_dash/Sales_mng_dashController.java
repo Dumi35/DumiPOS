@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
 import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -31,9 +30,11 @@ public class Sales_mng_dashController implements Initializable {
 
     @FXML
     private Circle profile_pic;
-    
+    @FXML
     private AreaChart<?, ?> areaChart1;
+    @FXML
     private AreaChart<?, ?> areaChart2;
+    @FXML
     private AreaChart<?, ?> areaChart3;
     
 

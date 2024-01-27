@@ -51,7 +51,7 @@
                   <Label text="Products" textFill="WHITE" />
                </children>
                <padding>
-                  <Insets left="10.0" />
+                  <Insets left="10.0" /> 
                </padding>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="144.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
