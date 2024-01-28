@@ -24,14 +24,14 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" style="-fx-background-color: white;" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IT_admin_dash.IT_admin_dash_Controller">
    <left>
-      <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="162.0" spacing="10.0" styleClass="sideBar" stylesheets="@../sales_mng_dash/index.css" BorderPane.alignment="CENTER">
+      <VBox prefHeight="400.0" prefWidth="162.0" spacing="10.0" styleClass="sideBar" stylesheets="@../sales_mng_dash/index.css" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="65.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/PAULogo_noBG.png" />
                </image>
             </ImageView>
-            <HBox fx:id="DashboardTab" alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -44,7 +44,7 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="RegisterUserTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="105.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="105.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -57,7 +57,7 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="UpdateUserTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="144.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="144.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -70,7 +70,7 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="BackUpTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="183.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="183.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -84,6 +84,32 @@
                </padding>
             </HBox>
             <Line endX="67.5" startX="-100.0" stroke="#908c8c" />
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+               <children>
+                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/tabler_report.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Reports" textFill="WHITE" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="261.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+               <children>
+                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/iconamoon_profile-bold.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Sellers" textFill="WHITE" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
          </children>
          <opaqueInsets>
             <Insets />
@@ -127,12 +153,12 @@
             </HBox>
          </bottom>
          <center>
-            <StackPane fx:id="StackPane" BorderPane.alignment="CENTER">
+            <StackPane BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
                </BorderPane.margin>
                <children>
-                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                  <VBox prefHeight="200.0" prefWidth="466.0" styleClass="card" visible="false">
                      <children>
                         <Label text="All Users">
                            <font>
@@ -142,21 +168,21 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                            </padding>
                         </Label>
-                        <TableView fx:id="AllUsersTable" focusTraversable="false" prefHeight="465.0" prefWidth="1154.0">
+                        <TableView focusTraversable="false" prefHeight="465.0" prefWidth="1154.0">
                            <columns>
-                              <TableColumn fx:id="ID_col" prefWidth="75.0" text="ID" />
-                              <TableColumn fx:id="Name_col" prefWidth="199.0" text="Name" />
-                              <TableColumn fx:id="Email_col" prefWidth="177.0" text="Email" />
-                              <TableColumn fx:id="Phone_No_col" prefWidth="126.0" text="Phone_No" />
-                              <TableColumn fx:id="DOB_col" prefWidth="142.0" text="Date of Birth" />
-                              <TableColumn fx:id="Gender_col" prefWidth="132.0" text="Gender" />
-                              <TableColumn fx:id="Dept_col" prefWidth="189.0" text="Department" />
-                              <TableColumn fx:id="Role_col" prefWidth="152.0" text="Role" />
+                              <TableColumn prefWidth="75.0" text="ID" />
+                              <TableColumn prefWidth="199.0" text="Name" />
+                              <TableColumn prefWidth="177.0" text="Email" />
+                              <TableColumn prefWidth="126.0" text="Phone_No" />
+                              <TableColumn prefWidth="142.0" text="Date of Birth" />
+                              <TableColumn prefWidth="132.0" text="Gender" />
+                              <TableColumn prefWidth="189.0" text="Department" />
+                              <TableColumn prefWidth="152.0" text="Role" />
                            </columns>
                         </TableView>
                      </children>
                   </VBox>
-                  <VBox fx:id="RegisterUserTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
+                  <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
                      <children>
                         <Label text="Create a new user">
                            <font>
@@ -260,7 +286,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ChoiceBox fx:id="staffRole1" prefHeight="38.0" prefWidth="223.0" />
+                                          <ChoiceBox fx:id="staffRole1" onMouseClicked="#ControlRoleChoiceBoxes" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -310,7 +336,7 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox fx:id="UpdateUserTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
+                  <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
                      <children>
                         <Label text="Update a user">
                            <font>

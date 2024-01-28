@@ -4,6 +4,7 @@
  */
 package sales_mng_dash;
 
+import POS_System_Classes.SwitchTabs;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -18,6 +19,8 @@ import javafx.geometry.Side;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
@@ -36,6 +39,10 @@ public class Sales_mng_dashController implements Initializable {
     private AreaChart<?, ?> areaChart2;
     @FXML
     private AreaChart<?, ?> areaChart3;
+    @FXML
+    private VBox sideBar;
+    @FXML
+    private StackPane StackPane;
     
 
     public void setData() {
@@ -118,6 +125,7 @@ public class Sales_mng_dashController implements Initializable {
         setAreaChart1();
         setAreaChart2();
         setAreaChart3();
+        SwitchTabs.switchTabs(sideBar,StackPane);
     }    
     
 }

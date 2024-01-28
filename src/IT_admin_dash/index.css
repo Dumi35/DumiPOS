@@ -27,6 +27,10 @@ Label, Button, TextArea, TableColumn, TextField, TableCell, ChoiceBox{
     -fx-background-radius: 5px;
 }
 
+*{
+   -fx-font-family: 'Outfit Regular', sans-serif; 
+}
+
 ChoiceBox{
     -fx-background-color: #fff;
     -fx-border-color:grey;
@@ -57,8 +61,11 @@ AnchorPane, VBox, HBox, BorderPane{
     -fx-background-color: #fff;
 }
 
+.dialog-pane:header .header-panel .label{
+    -fx-background-color: yellow;
+}
 
-TextField:focused{
+TextField:focused, ChoiceBox:focused{
     -fx-background-radius: 5px;
     -fx-border-color: #2e3a6e;
     -fx-border-radius:5px;
@@ -96,9 +103,3 @@ Button{
         #DDDDDD;
 }
 
-@media only screen and (min-device-width: 480px) and (max-device-width:1024px){
-    .sideBar{
-        -fx-background-color: red;
-    }
-
-}
