@@ -1,12 +1,12 @@
 package IT_admin_dash;
 
-import POS_System_Classes.DatabaseConn;
-import POS_System_Classes.EmailSending;
-import POS_System_Classes.Hashing;
-import POS_System_Classes.Images;
-import static POS_System_Classes.Images.photo;
-import POS_System_Classes.Staff;
-import POS_System_Classes.SwitchTabs;
+import utility_classes.DatabaseConn;
+import utility_classes.EmailSending;
+import utility_classes.Hashing;
+import utility_classes.Images;
+import static utility_classes.Images.photo;
+import model_classes.Staff;
+import utility_classes.SwitchTabs;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -50,6 +51,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -102,6 +104,22 @@ public class IT_admin_dash_Controller implements Initializable {
     @FXML
     private VBox sideBar;
     @FXML
+    private StackPane StackPane;
+    @FXML
+    private TableView<Staff> AllUsersTable;
+    @FXML
+    private TableColumn<Staff, String> ID_col;
+    @FXML
+    private TableColumn<Staff, String> Name_col;
+    @FXML
+    private TableColumn<Staff, String> Email_col;
+    @FXML
+    private TableColumn<Staff, String> Phone_No_col;
+    private TableColumn<Staff, Date> DOB_col;
+    private TableColumn<Staff, String> Gender_col;
+    private TableColumn<Staff, String> Dept_col;
+    private TableColumn<Staff, String> Role_col;
+    @FXML
     private HBox DashboardTab;
     @FXML
     private HBox RegisterUserTab;
@@ -112,29 +130,9 @@ public class IT_admin_dash_Controller implements Initializable {
     @FXML
     private VBox DashboardTabPane;
     @FXML
-    private StackPane StackPane;
-    @FXML
     private VBox RegisterUserTabPane;
     @FXML
-    private TableView<Staff> AllUsersTable;
-    @FXML
     private VBox UpdateUserTabPane;
-    @FXML
-    private TableColumn<Staff, String> ID_col;
-    @FXML
-    private TableColumn<Staff, String> Name_col;
-    @FXML
-    private TableColumn<Staff, String> Email_col;
-    @FXML
-    private TableColumn<Staff, String> Phone_No_col;
-    @FXML
-    private TableColumn<Staff, Date> DOB_col;
-    @FXML
-    private TableColumn<Staff, String> Gender_col;
-    @FXML
-    private TableColumn<Staff, String> Dept_col;
-    @FXML
-    private TableColumn<Staff, String> Role_col;
 
     public void setData() {
 
@@ -144,24 +142,7 @@ public class IT_admin_dash_Controller implements Initializable {
 
     }
 
-    public void setDefaultPassport() throws FileNotFoundException, IOException {
-        String filePath = "C:\\Users\\dumid\\Documents\\NetBeansProjects\\Dumi_POS_System\\src\\images\\user.jpg";
-        Image image = new Image("file:" + filePath, 150, 150, true, true);
-
-        staffPassport1.setFill(new ImagePattern(image)); //set default passport image
-
-        File imageFile = new File(filePath);
-        FileInputStream fis = new FileInputStream(imageFile);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        byte[] Byte = new byte[1024];
-
-        for (int i; (i = fis.read(Byte)) != -1;) {
-            baos.write(Byte, 0, i);
-        }
-        photo = baos.toByteArray();
-    }
-
+    //update and register staff pane functions
     @FXML
     public void Browse() {
         Images im = new Images();
@@ -177,7 +158,7 @@ public class IT_admin_dash_Controller implements Initializable {
             stage.resizableProperty().setValue(false);
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("error loading " + e);
         }
 
@@ -211,6 +192,7 @@ public class IT_admin_dash_Controller implements Initializable {
 
     }
 
+    //register staff pane functions
     @FXML
     public void CreateStaff() throws NoSuchAlgorithmException {
 
@@ -244,73 +226,99 @@ public class IT_admin_dash_Controller implements Initializable {
                 ps.setString(11, staff.getSalt());
 
                 //send email
-                // try {
-                String body = "Dear " + staff.getName() + ", your registration as student for Dumi POS was successful. \nPlease find your login details below: \nEmail Address: " + staff.getEmail() + "\nPassword: " + password;
+                try {
+                    String body = "Dear " + staff.getName() + ", your registration as student for Dumi POS was successful. \nPlease find your login details below: \nEmail Address: " + staff.getEmail() + "\nPassword: " + password;
 
-                Message message = (Message) new MimeMessage(session);
+                    Message message = (Message) new MimeMessage(session);
 
-                message.setFrom(new InternetAddress("dumebi328@gmail.com"));
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(staff.getEmail()));
-                message.setSubject("Registration for Dumi POS Successful");
-                message.setText(body);
+                    message.setFrom(new InternetAddress("dumebi328@gmail.com"));
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(staff.getEmail()));
+                    message.setSubject("Registration for Dumi POS Successful");
+                    message.setText(body);
 
-                Transport.send(message);
+                    Transport.send(message);
 
-                ps.executeUpdate();
+                    ps.executeUpdate();
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Registration");
-                alert.setContentText("User successfully created");
-                alert.showAndWait();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Registration");
+                    alert.setContentText("User successfully created");
+                    alert.showAndWait();
 
-                /* } catch (MessagingException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error Message");
-                        alert.setContentText(e.toString());
-                        alert.showAndWait();
-                    } */
-            } catch (Exception e) {
-                e.printStackTrace();
-                //  System.out.println("error " + e);
+                } catch (MessagingException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Message");
+                    alert.setContentText(e.toString());
+                    alert.showAndWait();
+                }
+            } catch (SQLException e) {
+                //e.printStackTrace();
+                System.out.println("error " + e);
             }
         }
     }
 
-    public void ReConnect() {
+    public void setDefaultPassport() throws FileNotFoundException, IOException {
+        String filePath = "C:\\Users\\dumid\\Documents\\NetBeansProjects\\Dumi_POS_System\\src\\images\\user.jpg";
+        Image image = new Image("file:" + filePath, 150, 150, true, true);
+
+        staffPassport1.setFill(new ImagePattern(image)); //set default passport image
+
+        File imageFile = new File(filePath);
+        FileInputStream fis = new FileInputStream(imageFile);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        byte[] Byte = new byte[1024];
+
+        for (int i; (i = fis.read(Byte)) != -1;) {
+            baos.write(Byte, 0, i);
+        }
+        photo = baos.toByteArray();
+    }
+
+    // Method to update the UI with new data
+    public void UpdateUI() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
             public void run() {
-                // Simulate backend data changes
-                con = DatabaseConn.connectDB();
-                try {
-                    ps = con.prepareStatement("select * from staff");
-                    String newData = "Updated Data at " + System.currentTimeMillis();
-
-                    // Update the UI on the JavaFX Application Thread
-                    Platform.runLater(() -> {
-                        try {
-                            ShowStaffData();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    });
-                } catch (SQLException ex) {
-                    Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
-                }   
+                // Update the UI on the JavaFX Application Thread
+                Platform.runLater(() -> {
+                    try {
+                        ShowStaffData();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
 
             }
         }, 0, 3000); // Update every 3 seconds
+    }   
+    
+    
+    public void stopTimer(){
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                try{
+                    System.out.println("Close button clicked!");
+                    root = FXMLLoader.load(getClass().getResource("AdminDashboard.fxml"));
+                    stage = new Stage();//(Stage)((Node)event.getSource()).getScene().getWindow();
+                    scene = new Scene(root);
+                    stage.resizableProperty().setValue(false);
+                    stage.setScene(scene);
+                    stage.show();
+                    
+                }catch (IOException ex) {
+                }
+                
+            }
+        });
+    
     }
 
-    // Method to update the UI with new data
-    private void updateUI(String newData) {
-        // Update the label text with new data
-        System.out.println("Wow, Sth changed in the DB "+newData);
-    }
-    
-    
+    //dashboard pane functions
     //retrieve all staff data from database
     public ObservableList<Staff> AllStaffListData() throws SQLException {
         ObservableList<Staff> listData = FXCollections.observableArrayList();
@@ -323,10 +331,10 @@ public class IT_admin_dash_Controller implements Initializable {
 
             Staff allSData;
             //java.sql.Date sqlDate = result.getDate("Date_Of_Birth");
-           // LocalDate localDate = sqlDate.toLocalDate();
-            
+            // LocalDate localDate = sqlDate.toLocalDate();
+
             while (result.next()) {
-                allSData = new Staff(result.getString("Staff_ID"), result.getString("Staff_Name"),result.getString("Email"), result.getString("Phone_no"), result.getDate("Date_Of_Birth"), result.getString("Gender"),result.getString("Department"), result.getString("Role"),result.getBytes("Passport"),result.getString("Hash_Password"), result.getString("Salt"));
+                allSData = new Staff(result.getString("Staff_ID"), result.getString("Staff_Name"), result.getString("Email"), result.getString("Phone_no"), result.getDate("Date_Of_Birth"), result.getString("Gender"), result.getString("Department"), result.getString("Role"), result.getBytes("Passport"), result.getString("Hash_Password"), result.getString("Salt"));
                 listData.add(allSData);
             }
 
@@ -357,7 +365,6 @@ public class IT_admin_dash_Controller implements Initializable {
         AllUsersTable.setItems(StaffData);
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -368,11 +375,11 @@ public class IT_admin_dash_Controller implements Initializable {
         staffRole1.setValue("Manager");
         staffGender1.getItems().addAll("Male", "Female");
         staffGender1.setValue("Female");
-        
+
         ControlRoleChoiceBoxes();
         SwitchTabs.switchTabs(sideBar, StackPane);
-        ReConnect();
-        
+        UpdateUI();
+
         try {
             setDefaultPassport();
         } catch (IOException ex) {

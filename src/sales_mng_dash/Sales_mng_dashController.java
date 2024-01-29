@@ -4,7 +4,7 @@
  */
 package sales_mng_dash;
 
-import POS_System_Classes.SwitchTabs;
+import utility_classes.SwitchTabs;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;

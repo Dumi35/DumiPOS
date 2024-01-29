@@ -4,7 +4,7 @@
  */
 package IT_admin_dash;
 
-import POS_System_Classes.Images;
+import utility_classes.Images;
 import java.awt.Graphics;
 //import java.awt.Image;
 //import java.awt.image.BufferedImage;

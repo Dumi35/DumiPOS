@@ -3,11 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/sales_mng_dash/Sales_mng_dashController.java</file>
-            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/IT_admin_dash/IT_admin_dash.fxml</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/IT_admin_dash/IT_admin_dash_Controller.java</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/sales_person_dash/index.css</file>
             <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/dumi_pos_system/Dumi_POS_System.java</file>
-            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/sales_mng_dash/sales_mng_dash.fxml</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/POS_System_Classes/Staff.java</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/sales_person_dash/Sales_person_dashController.java</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/sales_person_dash/sales_person_dash.fxml</file>
             <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/IT_admin_dash/index.css</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/POS_System_Classes/MyFileChooser.java</file>
+            <file>file:/C:/Users/dumid/Documents/NetBeansProjects/Dumi_POS_System/src/POS_System_Classes/comboBoxingg.java</file>
         </group>
     </open-files>
 </project-private>

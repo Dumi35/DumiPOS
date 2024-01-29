@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,42 +16,42 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" style="-fx-background-color: white;" stylesheets="@../IT_admin_dash/index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Inventory_mng_dash.Inventory_mng_dashController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" style="-fx-background-color: white;" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales_person_dash.Sales_person_dashController">
    <left>
-      <VBox prefHeight="400.0" prefWidth="162.0" spacing="10.0" styleClass="sideBar" stylesheets="@../sales_mng_dash/index.css" BorderPane.alignment="CENTER">
+      <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="162.0" spacing="10.0" styleClass="sideBar" stylesheets="@../sales_mng_dash/index.css" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="65.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/PAULogo_noBG.png" />
                </image>
             </ImageView>
-            <HBox alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
+            <HBox fx:id="DashboardTab" alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icon-park_ad-product.png" />
                      </image>
                   </ImageView>
-                  <Label text="Dashboard" />
+                  <Label text="New Sale" />
                </children>
                <padding>
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="105.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox fx:id="RegisterUserTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="105.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icon-park_ad-product.png" />
                      </image>
                   </ImageView>
-                  <Label text="New Product" textFill="WHITE" />
+                  <Label text="Receipts" textFill="WHITE" />
                </children>
                <padding>
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="144.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox fx:id="UpdateUserTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="144.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -64,7 +64,7 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="183.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox fx:id="BackUpTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="183.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -78,32 +78,6 @@
                </padding>
             </HBox>
             <Line endX="67.5" startX="-100.0" stroke="#908c8c" />
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/tabler_report.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Reports" textFill="WHITE" />
-               </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="261.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/iconamoon_profile-bold.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Sellers" textFill="WHITE" />
-               </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </HBox>
          </children>
          <opaqueInsets>
             <Insets />
@@ -118,11 +92,7 @@
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="588.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="213.0" promptText="Search user" style="-fx-border-color: none;" styleClass="searchBar">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </TextField>
+                  <ComboBox prefHeight="43.0" prefWidth="250.0" promptText="Search product" styleClass="searchBar" />
                   <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                   <Label minWidth="-Infinity" prefHeight="20.0" prefWidth="89.0" text="Dumebi Duru">
                      <font>
@@ -147,14 +117,14 @@
             </HBox>
          </bottom>
          <center>
-            <StackPane BorderPane.alignment="CENTER">
+            <StackPane fx:id="StackPane" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
                </BorderPane.margin>
                <children>
-                  <VBox prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card">
                      <children>
-                        <Label text="All Products">
+                        <Label text="New Sale">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -162,16 +132,12 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                            </padding>
                         </Label>
-                        <TableView fx:id="AllProductsTable" focusTraversable="false" prefHeight="465.0" prefWidth="1154.0">
+                        <TableView fx:id="AllUsersTable" focusTraversable="false" prefHeight="465.0" prefWidth="1154.0">
                            <columns>
-                              <TableColumn fx:id="code_col" prefWidth="75.0" text="Code" />
-                              <TableColumn fx:id="name_col" prefWidth="199.0" text="Name" />
-                              <TableColumn fx:id="manufacturer_col" prefWidth="177.0" text="Manufacturer" />
-                              <TableColumn fx:id="mfd_date_col" prefWidth="126.0" text="MFD_Date" />
-                              <TableColumn fx:id="exp_date_col" prefWidth="142.0" text="EXP_Date" />
-                              <TableColumn fx:id="quantity_col" prefWidth="132.0" text="Quantity" />
-                              <TableColumn fx:id="price_col" prefWidth="189.0" text="Price" />
-                              <TableColumn fx:id="status_col" prefWidth="152.0" text="Status" />
+                              <TableColumn fx:id="ID_col" prefWidth="75.0" text="Code" />
+                              <TableColumn fx:id="Name_col" prefWidth="199.0" text="Name" />
+                              <TableColumn fx:id="Email_col" prefWidth="177.0" text="Quantity" />
+                              <TableColumn fx:id="Phone_No_col" prefWidth="126.0" text="Amount" />
                            </columns>
                         </TableView>
                      </children>

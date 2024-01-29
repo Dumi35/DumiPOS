@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import POS_System_Classes.Hashing;
+import utility_classes.Hashing;
 import java.security.NoSuchAlgorithmException;
 import javafx.scene.image.Image;
 
@@ -19,7 +19,8 @@ public class Dumi_POS_System extends Application {
     public void start(Stage stage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
+       // Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../alerts/alert.fxml"));
         
         Scene scene = new Scene(root);

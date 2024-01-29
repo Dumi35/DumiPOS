@@ -4,8 +4,8 @@
  */
 package login;
 
-import POS_System_Classes.DatabaseConn;
-import POS_System_Classes.Hashing;
+import utility_classes.DatabaseConn;
+import utility_classes.Hashing;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

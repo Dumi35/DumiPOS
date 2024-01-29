@@ -1,4 +1,4 @@
-package POS_System_Classes;
+package model_classes;
 
 import java.io.File;
 import java.util.Date;

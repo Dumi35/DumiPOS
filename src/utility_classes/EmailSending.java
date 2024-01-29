@@ -1,4 +1,4 @@
-package POS_System_Classes;
+package utility_classes;
 
 import javax.mail.Session;
 import java.util.Properties;

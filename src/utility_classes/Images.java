@@ -1,4 +1,4 @@
-package POS_System_Classes;
+package utility_classes;
 
 import com.mysql.cj.jdbc.Driver;
 import java.sql.Connection;
