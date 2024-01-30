@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package alerts;
+package components.alerts;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,7 +24,7 @@ public class AlertController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         //alertPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        System.out.println("btn types "+ alertPane.getButtonTypes());
+       // System.out.println("btn types "+ alertPane.getButtonTypes());
         
     }    
     

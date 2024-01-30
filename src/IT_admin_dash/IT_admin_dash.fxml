@@ -468,6 +468,75 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </VBox>
+                  <VBox fx:id="BackUpTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
+                     <children>
+                        <Label text="Backup">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <VBox>
+                           <children>
+                              <FlowPane hgap="20.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <Label text="ID *">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField prefHeight="36.0" prefWidth="149.0" promptText="001">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                    <DatePicker />
+                                    <VBox layoutX="169.0" layoutY="10.0">
+                                       <children>
+                                          <Label text="Email*">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField prefHeight="38.0" prefWidth="450.0" promptText="johndoe@gmail.com">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="10.0" layoutY="85.0">
+                                       <children>
+                                          <Label text="Date of Birth *">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <DatePicker prefHeight="38.0" prefWidth="179.0" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </VBox>
+                        <HBox spacing="20.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#Backup" prefHeight="32.0" prefWidth="140.0" text="Save changes" textFill="WHITE">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </padding>
+                  </VBox>
                </children>
             </StackPane>
          </center>

@@ -20,7 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import alerts.AlertController;
+import components.alerts.AlertController;
 
 public class login_controller implements Initializable {
 

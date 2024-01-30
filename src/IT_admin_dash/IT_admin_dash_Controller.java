@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +45,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -94,9 +96,6 @@ public class IT_admin_dash_Controller implements Initializable {
     private ChoiceBox<String> staffDepartment1;
     @FXML
     private ChoiceBox<String> staffRole1;
-//    @FXML
-//    private ImageView staffPassport1;
-
     @FXML
     private Rectangle staffPassport1;
 
@@ -115,9 +114,13 @@ public class IT_admin_dash_Controller implements Initializable {
     private TableColumn<Staff, String> Email_col;
     @FXML
     private TableColumn<Staff, String> Phone_No_col;
+    @FXML
     private TableColumn<Staff, Date> DOB_col;
+    @FXML
     private TableColumn<Staff, String> Gender_col;
+    @FXML
     private TableColumn<Staff, String> Dept_col;
+    @FXML
     private TableColumn<Staff, String> Role_col;
     @FXML
     private HBox DashboardTab;
@@ -277,7 +280,7 @@ public class IT_admin_dash_Controller implements Initializable {
     }
 
     // Method to update the UI with new data
-    public void UpdateUI() {
+    public void UpdateUI() throws IOException {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -287,6 +290,7 @@ public class IT_admin_dash_Controller implements Initializable {
                 Platform.runLater(() -> {
                     try {
                         ShowStaffData();
+
                     } catch (SQLException ex) {
                         Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -294,28 +298,24 @@ public class IT_admin_dash_Controller implements Initializable {
 
             }
         }, 0, 3000); // Update every 3 seconds
-    }   
-    
-    
-    public void stopTimer(){
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+        TimerTask task = new TimerTask() {
             @Override
-            public void handle(WindowEvent event) {
-                try{
-                    System.out.println("Close button clicked!");
-                    root = FXMLLoader.load(getClass().getResource("AdminDashboard.fxml"));
-                    stage = new Stage();//(Stage)((Node)event.getSource()).getScene().getWindow();
-                    scene = new Scene(root);
-                    stage.resizableProperty().setValue(false);
-                    stage.setScene(scene);
-                    stage.show();
-                    
-                }catch (IOException ex) {
-                }
-                
+            public void run() {
+                stage = (Stage) StackPane.getScene().getWindow();
+
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        timer.cancel();
+                    }
+                });
             }
-        });
-    
+        };
+
+        // Schedule the task to run once after 5 seconds (5000 milliseconds)
+        timer.schedule(task, 3000);
+
     }
 
     //dashboard pane functions
@@ -326,19 +326,17 @@ public class IT_admin_dash_Controller implements Initializable {
         con = DatabaseConn.connectDB();
         //read from Database table
         try {
-            ps = con.prepareStatement("SELECT * FROM staff");// + QuizTableName.getText());
+            ps = con.prepareStatement("SELECT * FROM staff");
             result = ps.executeQuery();
 
             Staff allSData;
-            //java.sql.Date sqlDate = result.getDate("Date_Of_Birth");
-            // LocalDate localDate = sqlDate.toLocalDate();
 
             while (result.next()) {
                 allSData = new Staff(result.getString("Staff_ID"), result.getString("Staff_Name"), result.getString("Email"), result.getString("Phone_no"), result.getDate("Date_Of_Birth"), result.getString("Gender"), result.getString("Department"), result.getString("Role"), result.getBytes("Passport"), result.getString("Hash_Password"), result.getString("Salt"));
                 listData.add(allSData);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setContentText(e.toString());
@@ -365,6 +363,20 @@ public class IT_admin_dash_Controller implements Initializable {
         AllUsersTable.setItems(StaffData);
     }
 
+    //backup pane functions
+    @FXML
+    public void Backup() {
+        con = DatabaseConn.connectDB();
+        //ps = con.prepareStatement("BACKUP DATABASE pos_system TO DISK = 'C:\\Users\\dumid\\Documents\\backups\\MyDB' ");
+        //ps.execute();
+        try{
+        
+        Runtime.getRuntime().exec("mysqldump -u root -p#BonBon214 pos_system > C:\\Users\\dumid\\Documents\\backups\\backup.sql");
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -378,12 +390,17 @@ public class IT_admin_dash_Controller implements Initializable {
 
         ControlRoleChoiceBoxes();
         SwitchTabs.switchTabs(sideBar, StackPane);
-        UpdateUI();
+        try {
+            UpdateUI();
+        } catch (IOException ex) {
+            Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
             setDefaultPassport();
         } catch (IOException ex) {
             Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 }
