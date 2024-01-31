@@ -21,6 +21,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import components.alerts.AlertController;
+import java.io.IOException;
+
 
 public class login_controller implements Initializable {
 
@@ -53,18 +55,21 @@ public class login_controller implements Initializable {
                 String hashedPassword = Hashing.PepperPassword(salted);
 
                 if (hashedPassword.equals(storedPassword)) {
-                    System.out.println("login successful");
+                    
                     try {
-//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../alerts/alert.fxml"));
-//                        root = loader.load();
-//                        AlertController ac = loader.getController();
-//                        ac.SetContent("Login successful");
-//                        stage = new Stage();
-//                        scene = new Scene(root);
-//                        stage.resizableProperty().setValue(false);
-//                        stage.setScene(scene);
-//                        stage.show();
-                    } catch (Exception e) {
+                        //load alert pane
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+                        root = loader.load();
+                        stage = (Stage) loginEmail.getScene().getWindow();
+                        AlertController ac = loader.getController();
+                        ac.SetContent("Login successful",root, stage);
+                       
+                        if(ac.isOkClicked()){
+                            System.out.println("ok clicked");
+                        }else{
+                            System.out.println("cancel clicked");
+                        }
+                    } catch (IOException e) {
                         System.out.println("error loading " + e);
                     }
                 }

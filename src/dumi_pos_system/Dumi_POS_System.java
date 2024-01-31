@@ -1,5 +1,6 @@
 package dumi_pos_system;
 
+import components.alerts.AlertController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utility_classes.Hashing;
 import java.security.NoSuchAlgorithmException;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 
 /**
@@ -14,18 +17,20 @@ import javafx.scene.image.Image;
  * @author dumid
  */
 public class Dumi_POS_System extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
-       Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
+        
+        
         //Parent root = FXMLLoader.load(getClass().getResource("../components/alerts/alert.fxml"));
         
         Scene scene = new Scene(root);
         stage.setTitle("Dumebi POS");
-        //stage.resizableProperty().setValue(false);
+        stage.resizableProperty().setValue(false);
         stage.centerOnScreen();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("../images/PAULogo.png")));
         stage.setScene(scene);
@@ -42,5 +47,5 @@ public class Dumi_POS_System extends Application {
 //        String salted = Hashing.SaltPassword(password, salt);
 //        Hashing.PepperPassword(salted); //final hashed password s returned here
     }
-    
+
 }

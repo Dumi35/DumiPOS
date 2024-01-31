@@ -1,6 +1,7 @@
 package IT_admin_dash;
 
 //import com.sun.webkit.network.DateParser;
+import components.alerts.AlertController;
 import utility_classes.DatabaseConn;
 import utility_classes.EmailSending;
 import utility_classes.Hashing;
@@ -278,6 +279,11 @@ public class IT_admin_dash_Controller implements Initializable {
         }
     }
 
+    @FXML
+    public void SearchStaff() throws NoSuchAlgorithmException {
+
+    }
+
     public void setDefaultPassport() throws FileNotFoundException, IOException {
         String filePath = "C:\\Users\\dumid\\Documents\\NetBeansProjects\\Dumi_POS_System\\src\\images\\user.jpg";
         Image image = new Image("file:" + filePath, 150, 150, true, true);
@@ -422,38 +428,45 @@ public class IT_admin_dash_Controller implements Initializable {
     Timer backUpTimer = new Timer();
 
     @FXML
-    public void Backup() throws ParseException {
+    public void Backup() throws ParseException, IOException {
         int min = Integer.parseInt(minComboBox.getValue());
         int hour = Integer.parseInt(hourComboBox.getValue());
-        
+
+        //load alert pane
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        root = loader.load();
+        stage = (Stage) hourComboBox.getScene().getWindow();
+        AlertController ac = loader.getController();
+        ac.SetContent("Automatic backups set to "+ hourComboBox.getValue()+":"+minComboBox.getValue(), root, stage);
+
         //stop already existing timer to avoid creating 2 timer threads
         backUpTimer.cancel();
         // Schedule a new timer task with updated parameters
-        backUpTimer= new Timer();
+        backUpTimer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                    try {
-                        LocalTime targetTime = LocalTime.of(hour, min); // 5:30 PM
-                        LocalTime currentTime = LocalTime.of(java.time.LocalTime.now().getHour(), java.time.LocalTime.now().getMinute());
+                try {
+                    LocalTime targetTime = LocalTime.of(hour, min); // 5:30 PM
+                    LocalTime currentTime = LocalTime.of(java.time.LocalTime.now().getHour(), java.time.LocalTime.now().getMinute());
 
-                        //check if time equals system time
-                        if (currentTime.equals(targetTime)) {
-                            String command = "mysqldump -u root -p#BonBon214 pos_system --result-file=" + Folder_Name_Label.getText() + "\\" + "POS-" + java.time.LocalDate.now() + ".sql"; //save backup file
-                            Runtime.getRuntime().exec(command);
-                            //System.out.println("we are equal "+ targetTime + currentTime);
+                    //check if time equals system time
+                    if (currentTime.equals(targetTime)) {
+                        String command = "mysqldump -u root -p#BonBon214 pos_system --result-file=" + Folder_Name_Label.getText() + "\\" + "POS-" + java.time.LocalDate.now() + ".sql"; //save backup file
+                        Runtime.getRuntime().exec(command);
+                        //System.out.println("we are equal "+ targetTime + currentTime);
 
-                        } else {
-                            //System.out.println("we arenot equal "+ targetTime + currentTime);
-                        }
-
-                    } catch (Exception e) {
-                        System.out.println(e);
+                    } else {
+                        //System.out.println("we arenot equal "+ targetTime + currentTime);
                     }
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
             }
         };
         backUpTimer.scheduleAtFixedRate(task, 0, 3000);
-        
+
     }
 
     @Override

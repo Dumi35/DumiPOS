@@ -310,16 +310,16 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox fx:id="UpdateUserTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
+                  <VBox fx:id="UpdateUserTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
                      <children>
                         <Label text="Update a user">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <VBox>
+                        <HBox spacing="30.0">
                            <children>
-                              <FlowPane hgap="20.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
+                              <FlowPane hgap="20.0" prefHeight="507.0" prefWidth="636.0" vgap="10.0">
                                  <children>
                                     <VBox>
                                        <children>
@@ -328,7 +328,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField prefHeight="36.0" prefWidth="149.0" promptText="001">
+                                          <TextField fx:id="staffID11" prefHeight="36.0" prefWidth="149.0" promptText="001">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -342,7 +342,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField prefHeight="38.0" prefWidth="450.0" promptText="John Doe">
+                                          <TextField fx:id="staffName11" prefHeight="38.0" prefWidth="425.0" promptText="John Doe">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -356,7 +356,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField prefHeight="38.0" prefWidth="450.0" promptText="johndoe@gmail.com">
+                                          <TextField fx:id="staffEmail11" prefHeight="38.0" prefWidth="425.0" promptText="johndoe@gmail.com">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -370,7 +370,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField prefHeight="38.0" prefWidth="149.0" promptText="+234 1111 111 1111">
+                                          <TextField fx:id="staffPhoneNo11" prefHeight="38.0" prefWidth="149.0" promptText="+234 1111 111 1111">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -384,7 +384,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <DatePicker prefHeight="38.0" prefWidth="179.0" />
+                                          <DatePicker fx:id="staffDOB11" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="253.0" layoutY="85.0">
@@ -394,7 +394,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ComboBox prefHeight="38.0" prefWidth="223.0" style="-fx-background-color: #fff; -fx-border-color: grey;" />
+                                          <ChoiceBox fx:id="staffGender11" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="496.0" layoutY="85.0">
@@ -404,7 +404,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ComboBox prefHeight="38.0" prefWidth="223.0" style="-fx-background-color: #fff; -fx-border-color: grey;" />
+                                          <ChoiceBox fx:id="staffDepartment11" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="739.0" layoutY="85.0">
@@ -414,39 +414,40 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ComboBox prefHeight="38.0" prefWidth="223.0" style="-fx-background-color: #fff; -fx-border-color: grey;" />
+                                          <ChoiceBox fx:id="staffRole11" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
-                                    <VBox layoutX="10.0" layoutY="160.0">
+                                 </children>
+                              </FlowPane>
+                              <Pane prefHeight="401.0" prefWidth="4.0" style="-fx-border-color: grey; -fx-background-color: grey;" />
+                              <VBox spacing="20.0">
+                                 <children>
+                                    <VBox>
                                        <children>
                                           <Label text="Passport *">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Pane style="-fx-border-color: grey; -fx-border-radius: 10px;">
-                                             <children>
-                                                <ImageView fitHeight="150.0" fitWidth="191.0" pickOnBounds="true" preserveRatio="true" styleClass="passport" />
-                                             </children>
-                                          </Pane>
+                                          <Rectangle fx:id="staffPassport11" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
                                        </children>
                                     </VBox>
+                                    <HBox spacing="20.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#OpenWebCam" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Webcam" textFill="WHITE">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#Browse" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Browse" textFill="WHITE">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </FlowPane>
-                           </children>
-                        </VBox>
-                        <HBox spacing="20.0">
-                           <children>
-                              <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Webcam" textFill="WHITE">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Button>
-                              <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Browse" textFill="WHITE">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Button>
+                              </VBox>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="20.0">
@@ -468,7 +469,7 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox fx:id="BackUpTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
+                  <VBox fx:id="BackUpTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
                      <children>
                         <Label text="Backup">
                            <font>
