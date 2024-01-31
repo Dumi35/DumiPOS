@@ -80,14 +80,14 @@ public class AlertController implements Initializable {
     }
 
     private void handleOKButtonAction() {
-        System.out.println("OK button clicked");
+        //System.out.println("OK button clicked");
         okClicked= true;
         closeDialog();
         stage.getScene().getRoot().setDisable(false);
     }
 
     private void handleCancelButtonAction() {
-        System.out.println("Cancel button clicked");
+        //System.out.println("Cancel button clicked");
         okClicked = false;
         closeDialog();
         stage.getScene().getRoot().setDisable(false);

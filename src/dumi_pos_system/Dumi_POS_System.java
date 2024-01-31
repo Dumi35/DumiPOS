@@ -8,9 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utility_classes.Hashing;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
+import utility_classes.ValidDate;
 
 /**
  *
@@ -20,10 +22,10 @@ public class Dumi_POS_System extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
         
         
         //Parent root = FXMLLoader.load(getClass().getResource("../components/alerts/alert.fxml"));
@@ -40,8 +42,9 @@ public class Dumi_POS_System extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, SQLException {
         launch(args);
+       // ValidDate.isBirthday();
 //        String password = Hashing.generateRandomPassword(9);
 //        String salt = Hashing.generateSalt();
 //        String salted = Hashing.SaltPassword(password, salt);

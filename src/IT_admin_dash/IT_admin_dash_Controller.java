@@ -70,6 +70,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import utility_classes.ValidDate;
 
 public class IT_admin_dash_Controller implements Initializable {
 
@@ -197,8 +198,8 @@ public class IT_admin_dash_Controller implements Initializable {
                             staffRole1.setValue("Manager");
                         }
                         case "Sales" -> {
-                            staffRole1.getItems().setAll("Manager", "Sales Person");
-                            staffRole1.setValue("Manager");
+                            staffRole1.getItems().setAll("Sales Manager", "Sales Person");
+                            staffRole1.setValue("Sales Manager");
                         }
                         case "IT" -> {
                             staffRole1.getItems().setAll("Admin");
@@ -328,17 +329,40 @@ public class IT_admin_dash_Controller implements Initializable {
             public void run() {
                 stage = (Stage) StackPane.getScene().getWindow();
 
+                //listen for when close button is clicked to stop the updateUI function
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent event) {
                         timer.cancel();
                     }
                 });
+                Platform.runLater(() -> {
+                    // Update JavaFX UI components here
+                    DisplayBirthdays();
+                    // This code will run on the JavaFX Application Thread
+                });
             }
         };
 
         timer.schedule(task, 3000);// Schedule the task to run once after 3 seconds 
 
+    }
+
+    public void DisplayBirthdays() {
+        //load birthday alert
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+        try {
+            root = loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        AlertController ac = loader.getController();
+        try {
+            ac.SetContent("Today's bday celebs: "+ValidDate.isBirthday(), root, stage);
+        } catch (SQLException ex) {
+            Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //dashboard pane functions
@@ -437,7 +461,7 @@ public class IT_admin_dash_Controller implements Initializable {
         root = loader.load();
         stage = (Stage) hourComboBox.getScene().getWindow();
         AlertController ac = loader.getController();
-        ac.SetContent("Automatic backups set to "+ hourComboBox.getValue()+":"+minComboBox.getValue(), root, stage);
+        ac.SetContent("Automatic backups set to " + hourComboBox.getValue() + ":" + minComboBox.getValue(), root, stage);
 
         //stop already existing timer to avoid creating 2 timer threads
         backUpTimer.cancel();
@@ -475,7 +499,7 @@ public class IT_admin_dash_Controller implements Initializable {
         setData();
         staffDepartment1.getItems().addAll("Inventory", "Sales", "IT");
         staffDepartment1.setValue("Inventory");
-        staffRole1.getItems().addAll("Manager", "SalesPerson");
+        staffRole1.getItems().addAll("Manager");
         staffRole1.setValue("Manager");
         staffGender1.getItems().addAll("Male", "Female");
         staffGender1.setValue("Female");
