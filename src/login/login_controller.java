@@ -55,15 +55,15 @@ public class login_controller implements Initializable {
                 if (hashedPassword.equals(storedPassword)) {
                     System.out.println("login successful");
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../alerts/alert.fxml"));
-                        root = loader.load();
-                        AlertController ac = loader.getController();
-                        ac.SetContent("Login successful");
-                        stage = new Stage();
-                        scene = new Scene(root);
-                        stage.resizableProperty().setValue(false);
-                        stage.setScene(scene);
-                        stage.show();
+//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../alerts/alert.fxml"));
+//                        root = loader.load();
+//                        AlertController ac = loader.getController();
+//                        ac.SetContent("Login successful");
+//                        stage = new Stage();
+//                        scene = new Scene(root);
+//                        stage.resizableProperty().setValue(false);
+//                        stage.setScene(scene);
+//                        stage.show();
                     } catch (Exception e) {
                         System.out.println("error loading " + e);
                     }

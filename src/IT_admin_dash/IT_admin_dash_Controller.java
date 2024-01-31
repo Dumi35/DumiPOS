@@ -1,5 +1,6 @@
 package IT_admin_dash;
 
+//import com.sun.webkit.network.DateParser;
 import utility_classes.DatabaseConn;
 import utility_classes.EmailSending;
 import utility_classes.Hashing;
@@ -16,10 +17,14 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,6 +33,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -38,7 +44,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -52,6 +60,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.mail.Message;
@@ -136,6 +145,14 @@ public class IT_admin_dash_Controller implements Initializable {
     private VBox RegisterUserTabPane;
     @FXML
     private VBox UpdateUserTabPane;
+    @FXML
+    private VBox BackUpTabPane;
+    @FXML
+    private Label Folder_Name_Label;
+    @FXML
+    private ComboBox<String> hourComboBox;
+    @FXML
+    private ComboBox<String> minComboBox;
 
     public void setData() {
 
@@ -282,6 +299,7 @@ public class IT_admin_dash_Controller implements Initializable {
     // Method to update the UI with new data
     public void UpdateUI() throws IOException {
         Timer timer = new Timer();
+
         timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
@@ -313,8 +331,7 @@ public class IT_admin_dash_Controller implements Initializable {
             }
         };
 
-        // Schedule the task to run once after 5 seconds (5000 milliseconds)
-        timer.schedule(task, 3000);
+        timer.schedule(task, 3000);// Schedule the task to run once after 3 seconds 
 
     }
 
@@ -364,17 +381,79 @@ public class IT_admin_dash_Controller implements Initializable {
     }
 
     //backup pane functions
-    @FXML
-    public void Backup() {
-        con = DatabaseConn.connectDB();
-        //ps = con.prepareStatement("BACKUP DATABASE pos_system TO DISK = 'C:\\Users\\dumid\\Documents\\backups\\MyDB' ");
-        //ps.execute();
-        try{
-        
-        Runtime.getRuntime().exec("mysqldump -u root -p#BonBon214 pos_system > C:\\Users\\dumid\\Documents\\backups\\backup.sql");
-        }catch(Exception e){
-            System.out.println(e);
+    public void setBackUpTimes() {
+        ObservableList<String> hours = FXCollections.observableArrayList();
+        ObservableList<String> mins = FXCollections.observableArrayList();
+
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {
+                mins.add("0" + String.valueOf(i));
+            } else {
+                mins.add(String.valueOf(i));
+            }
         }
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                hours.add("0" + String.valueOf(i));
+            } else {
+                hours.add(String.valueOf(i));
+            }
+        }
+        hourComboBox.setItems(hours);
+        minComboBox.setItems(mins);
+    }
+
+    @FXML
+    public void selectBackUpFolder() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a Directory");
+
+        stage = (Stage) StackPane.getScene().getWindow();
+        // Show the directory chooser dialog
+        File selectedDirectory = directoryChooser.showDialog(stage);
+
+        if (selectedDirectory != null) {
+            Folder_Name_Label.setText(selectedDirectory.getAbsolutePath());
+        } else {
+            System.out.println("No directory selected");
+        }
+    }
+
+    Timer backUpTimer = new Timer();
+
+    @FXML
+    public void Backup() throws ParseException {
+        int min = Integer.parseInt(minComboBox.getValue());
+        int hour = Integer.parseInt(hourComboBox.getValue());
+        
+        //stop already existing timer to avoid creating 2 timer threads
+        backUpTimer.cancel();
+        // Schedule a new timer task with updated parameters
+        backUpTimer= new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                    try {
+                        LocalTime targetTime = LocalTime.of(hour, min); // 5:30 PM
+                        LocalTime currentTime = LocalTime.of(java.time.LocalTime.now().getHour(), java.time.LocalTime.now().getMinute());
+
+                        //check if time equals system time
+                        if (currentTime.equals(targetTime)) {
+                            String command = "mysqldump -u root -p#BonBon214 pos_system --result-file=" + Folder_Name_Label.getText() + "\\" + "POS-" + java.time.LocalDate.now() + ".sql"; //save backup file
+                            Runtime.getRuntime().exec(command);
+                            //System.out.println("we are equal "+ targetTime + currentTime);
+
+                        } else {
+                            //System.out.println("we arenot equal "+ targetTime + currentTime);
+                        }
+
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+            }
+        };
+        backUpTimer.scheduleAtFixedRate(task, 0, 3000);
+        
     }
 
     @Override
@@ -401,6 +480,6 @@ public class IT_admin_dash_Controller implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        setBackUpTimes();//displays options for hour and min comboboxes in backup
     }
 }

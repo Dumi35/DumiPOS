@@ -132,7 +132,7 @@
                   <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
                </BorderPane.margin>
                <children>
-                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card" visible="false">
                      <children>
                         <Label text="All Users">
                            <font>
@@ -275,7 +275,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Rectangle fx:id="staffPassport1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="231.0" />
+                                          <Rectangle fx:id="staffPassport1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
                                        </children>
                                     </VBox>
                                     <HBox spacing="20.0">
@@ -468,7 +468,7 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox fx:id="BackUpTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
+                  <VBox fx:id="BackUpTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
                      <children>
                         <Label text="Backup">
                            <font>
@@ -479,59 +479,56 @@
                            <children>
                               <FlowPane hgap="20.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
                                  <children>
-                                    <VBox>
+                                    <VBox alignment="CENTER" prefHeight="61.0" prefWidth="1114.0">
                                        <children>
-                                          <Label text="ID *">
+                                          <ImageView fitHeight="63.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/ep_upload-filled.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label onMouseClicked="#selectBackUpFolder" styleClass="Folder_Name_Label" text="Select a folder to store your backups">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="24.0" />
                                              </font>
                                           </Label>
-                                          <TextField prefHeight="36.0" prefWidth="149.0" promptText="001">
+                                          <Label fx:id="Folder_Name_Label" layoutX="10.0" layoutY="10.0" text="folder name">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font size="22.0" />
                                              </font>
-                                          </TextField>
+                                          </Label>
                                        </children>
                                     </VBox>
-                                    <DatePicker />
-                                    <VBox layoutX="169.0" layoutY="10.0">
+                                    <VBox alignment="CENTER" layoutX="10.0" layoutY="85.0" prefHeight="73.0" prefWidth="1124.0" spacing="10.0">
                                        <children>
-                                          <Label text="Email*">
+                                          <Label text="BackUp Times">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField prefHeight="38.0" prefWidth="450.0" promptText="johndoe@gmail.com">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="10.0" layoutY="85.0">
-                                       <children>
-                                          <Label text="Date of Birth *">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <DatePicker prefHeight="38.0" prefWidth="179.0" />
+                                          <HBox alignment="CENTER" spacing="10.0">
+                                             <children>
+                                                <ComboBox fx:id="hourComboBox" prefHeight="40.0" prefWidth="173.0" promptText="Hour" styleClass="timeComboBox" />
+                                                <ComboBox fx:id="minComboBox" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="173.0" promptText="Min" styleClass="timeComboBox" />
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </VBox>
                                  </children>
                               </FlowPane>
                            </children>
                         </VBox>
-                        <HBox spacing="20.0">
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#Backup" prefHeight="32.0" prefWidth="140.0" text="Save changes" textFill="WHITE">
+                              <Button mnemonicParsing="false" onAction="#Backup" prefHeight="36.0" prefWidth="129.0" text="Save changes" textFill="WHITE">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Button>
                            </children>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" spacing="20.0" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
