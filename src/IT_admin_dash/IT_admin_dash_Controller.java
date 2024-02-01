@@ -2,6 +2,8 @@ package IT_admin_dash;
 
 //import com.sun.webkit.network.DateParser;
 import components.alerts.AlertController;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import utility_classes.DatabaseConn;
 import utility_classes.EmailSending;
 import utility_classes.Hashing;
@@ -35,6 +37,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -44,6 +47,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -54,6 +58,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -64,13 +72,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.imageio.ImageIO;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.swing.ImageIcon;
 import utility_classes.ValidDate;
+import javafx.scene.image.Image;
 
 public class IT_admin_dash_Controller implements Initializable {
 
@@ -88,7 +100,7 @@ public class IT_admin_dash_Controller implements Initializable {
     private ResultSet result;
 
     //TOOLS FOR EMAIL
-    private Session session;
+    private Session session = EmailSending.emailSend();
 
     @FXML
     private TextField staffID1;
@@ -155,6 +167,30 @@ public class IT_admin_dash_Controller implements Initializable {
     private ComboBox<String> hourComboBox;
     @FXML
     private ComboBox<String> minComboBox;
+    @FXML
+    private TextField searchUserBar;
+    @FXML
+    private TextField staffID2;
+    @FXML
+    private TextField staffName2;
+    @FXML
+    private TextField staffEmail2;
+    @FXML
+    private TextField staffPhoneNo2;
+    @FXML
+    private DatePicker staffDOB2;
+    @FXML
+    private ChoiceBox<String> staffGender2;
+    @FXML
+    private ChoiceBox<String> staffDepartment2;
+    @FXML
+    private ChoiceBox<String> staffRole2;
+    @FXML
+    private Rectangle staffPassport2;
+    @FXML
+    private Button updateStaffBtn;
+    @FXML
+    private Button ResetPasswordBtn;
 
     public void setData() {
 
@@ -204,6 +240,31 @@ public class IT_admin_dash_Controller implements Initializable {
                         case "IT" -> {
                             staffRole1.getItems().setAll("Admin");
                             staffRole1.setValue("Admin");
+                        }
+                        default -> {
+                        }
+                    }
+                }
+            });
+        });
+
+        staffDepartment2.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) // Set values for the second choice box based on the selected value of the first choice box
+                {
+                    switch (newValue) {
+                        case "Inventory" -> {
+                            staffRole2.getItems().setAll("Manager");
+                            staffRole2.setValue("Manager");
+                        }
+                        case "Sales" -> {
+                            staffRole2.getItems().setAll("Sales Manager", "Sales Person");
+                            staffRole2.setValue("Sales Manager");
+                        }
+                        case "IT" -> {
+                            staffRole2.getItems().setAll("Admin");
+                            staffRole2.setValue("Admin");
                         }
                         default -> {
                         }
@@ -280,11 +341,6 @@ public class IT_admin_dash_Controller implements Initializable {
         }
     }
 
-    @FXML
-    public void SearchStaff() throws NoSuchAlgorithmException {
-
-    }
-
     public void setDefaultPassport() throws FileNotFoundException, IOException {
         String filePath = "C:\\Users\\dumid\\Documents\\NetBeansProjects\\Dumi_POS_System\\src\\images\\user.jpg";
         Image image = new Image("file:" + filePath, 150, 150, true, true);
@@ -337,9 +393,13 @@ public class IT_admin_dash_Controller implements Initializable {
                     }
                 });
                 Platform.runLater(() -> {
-                    // Update JavaFX UI components here
-                    DisplayBirthdays();
-                    // This code will run on the JavaFX Application Thread
+                    try {
+                        // Update JavaFX UI components here
+                        DisplayBirthdays();
+                        // This code will run on the JavaFX Application Thread
+                    } catch (SQLException ex) {
+                        Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 });
             }
         };
@@ -348,7 +408,7 @@ public class IT_admin_dash_Controller implements Initializable {
 
     }
 
-    public void DisplayBirthdays() {
+    public void DisplayBirthdays() throws SQLException {
         //load birthday alert
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
         stage = (Stage) StackPane.getScene().getWindow();
@@ -358,10 +418,151 @@ public class IT_admin_dash_Controller implements Initializable {
             Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         AlertController ac = loader.getController();
+        if (ValidDate.isBirthday() != null) {
+            try {
+                ac.SetContent("Today's bday celebs: " + ValidDate.isBirthday(), root, stage);
+            } catch (SQLException ex) {
+                Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    //update pane functions
+    java.sql.Blob columnValue = null;//to load passport image
+
+    public void SearchStaff() {
+        searchUserBar.addEventFilter(KeyEvent.KEY_PRESSED, KeyEvent -> {
+            KeyCode Enter = KeyCode.ENTER;
+            if ((KeyEvent.getCode()).equals(Enter)) {
+
+                con = DatabaseConn.connectDB();
+                //read from Database table
+                try {
+                    ps = con.prepareStatement("SELECT * FROM staff where Staff_ID =?");
+                    ps.setString(1, searchUserBar.getText());
+                    result = ps.executeQuery();
+
+                    if (result.next()) {
+                        updateStaffBtn.setDisable(false);
+                        ResetPasswordBtn.setDisable(false);
+                        staffID2.setText(result.getString("Staff_ID"));
+                        staffName2.setText(result.getString("Staff_Name"));
+                        staffEmail2.setText(result.getString("Email"));
+                        staffPhoneNo2.setText(result.getString("Phone_no"));
+                        java.sql.Date sqlDate = result.getDate("Date_Of_Birth");
+                        LocalDate localDate = sqlDate.toLocalDate();
+                        staffDOB2.setValue(localDate);
+                        staffGender2.setValue(result.getString("Gender"));
+                        staffDepartment2.setValue(result.getString("Department"));
+                        staffRole2.setValue(result.getString("Role"));
+
+                        //load passport image
+                        columnValue = result.getBlob("Passport");
+
+                        if (columnValue != null) {
+                            byte[] imageData = columnValue.getBytes(1, (int) columnValue.length());
+                            Image image = new Image(new ByteArrayInputStream(imageData));
+                            staffPassport2.setFill(new ImagePattern(image));
+                        }
+
+                    } else {
+                        updateStaffBtn.setDisable(true);
+                        ResetPasswordBtn.setDisable(true);
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+    byte[] newPassport = null;
+
+    @FXML
+    public void changeProfile() {
+        Images im = new Images();
+        newPassport = im.BrowseSystemImages(staffPassport2);
+    }
+
+    @FXML
+    public void UpdateStaff() throws NoSuchAlgorithmException, IOException {
+        //load alert pane
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        root = loader.load();
+        stage = (Stage) staffID2.getScene().getWindow();
+        AlertController ac = loader.getController();
+        ac.SetContent("Are you sure you want to update?", root, stage);
+
+        if (ac.isOkClicked()) {
+            try {
+                con = DatabaseConn.connectDB();
+                ps = con.prepareStatement("update staff set Staff_ID=?, Staff_Name=?, Email=?,Phone_no=?,Date_Of_Birth=?, Gender=?, Department=?, Role=?, Passport=? where Staff_ID = ?");
+                ps.setString(1, staffID2.getText());
+                ps.setString(2, staffName2.getText());
+                ps.setString(3, staffEmail2.getText());
+                ps.setString(4, staffPhoneNo2.getText());
+                ps.setDate(5, Date.valueOf(staffDOB2.getValue()));
+                ps.setString(6, staffGender2.getValue());
+                ps.setString(7, staffDepartment2.getValue());
+                ps.setString(8, staffRole2.getValue());
+
+                if (newPassport != null) {
+                    ps.setBytes(9, newPassport);
+                } else {
+                    ps.setBlob(9, columnValue);//return original value, i.e no change to passport photo
+                }
+
+                ps.setString(10, searchUserBar.getText());
+                ps.executeUpdate();
+
+            } catch (SQLException e) {
+                //e.printStackTrace();
+                System.out.println("error " + e);
+            }
+        }
+    }
+
+    public void ResetPassword() throws NoSuchAlgorithmException, SQLException, IOException {
+        String password = Hashing.generateRandomPassword(9);
+        String salt = Hashing.generateSalt();
+        String salted = Hashing.SaltPassword(password, salt);
+        String hashedPassword = Hashing.PepperPassword(salted);
+        
+        //send new password to database
+        ps = con.prepareStatement("update staff set Hash_Password = ?, Salt=? where Staff_ID = ?");
+        ps.setString(1, hashedPassword);
+        ps.setString(2, salt);
+        ps.setString(3, staffID2.getText());
+        //send email
         try {
-            ac.SetContent("Today's bday celebs: "+ValidDate.isBirthday(), root, stage);
-        } catch (SQLException ex) {
-            Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            String body = "Dear " + staffName2.getText() + ", your password has been reset for Dumi POS. \nPlease find your new login details below: \nEmail Address: " + staffEmail2.getText() + "\nPassword: " + password;
+
+            Message message = (Message) new MimeMessage(session);
+
+            message.setFrom(new InternetAddress("dumebi328@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(staffEmail2.getText()));
+            message.setSubject("Password Reset for Dumi POS Successful");
+            message.setText(body);
+
+            Transport.send(message);
+
+            ps.executeUpdate();
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+            root = loader.load();
+            stage = (Stage) staffID2.getScene().getWindow();
+            AlertController ac = loader.getController();
+            ac.SetContent("Password reset successfully", root, stage);
+
+        } catch (SQLException | MessagingException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+            root = loader.load();
+            stage = (Stage) staffID2.getScene().getWindow();
+            AlertController ac = loader.getController();
+            ac.SetContent("Error resetting password", root, stage);
+            e.printStackTrace();
         }
     }
 
@@ -503,6 +704,14 @@ public class IT_admin_dash_Controller implements Initializable {
         staffRole1.setValue("Manager");
         staffGender1.getItems().addAll("Male", "Female");
         staffGender1.setValue("Female");
+
+        staffDepartment2.getItems().addAll("Inventory", "Sales", "IT");
+        staffDepartment2.setValue("Inventory");
+        staffRole2.getItems().addAll("Manager");
+        staffRole2.setValue("Manager");
+        staffGender2.getItems().addAll("Male", "Female");
+        staffGender2.setValue("Female");
+        SearchStaff();
 
         ControlRoleChoiceBoxes();
         SwitchTabs.switchTabs(sideBar, StackPane);

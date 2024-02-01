@@ -56,12 +56,10 @@ public class ValidDate {
         while (result.next()) {
             birthdayPeople.add(result.getString("Staff_Name"));
         }
+        if(birthdayPeople.isEmpty()){ //if noone's bday is the current day
+            return null;
+        }
         return convertArrayListToString(birthdayPeople);
     }
 
-//    public static void main(String[] args) throws NoSuchAlgorithmException, SQLException{
-//        launch(args);
-//        isBirthday();
-//
-//    }
 }

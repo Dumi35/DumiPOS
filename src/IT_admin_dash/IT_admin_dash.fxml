@@ -98,7 +98,7 @@
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="588.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="213.0" promptText="Search user" style="-fx-border-color: none;" styleClass="searchBar">
+                  <TextField fx:id="searchUserBar" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="213.0" promptText="Search user" style="-fx-border-color: none;" styleClass="searchBar">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
@@ -328,7 +328,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="staffID11" prefHeight="36.0" prefWidth="149.0" promptText="001">
+                                          <TextField fx:id="staffID2" prefHeight="36.0" prefWidth="149.0" promptText="001">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -342,7 +342,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="staffName11" prefHeight="38.0" prefWidth="425.0" promptText="John Doe">
+                                          <TextField fx:id="staffName2" prefHeight="38.0" prefWidth="425.0" promptText="John Doe">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -356,7 +356,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="staffEmail11" prefHeight="38.0" prefWidth="425.0" promptText="johndoe@gmail.com">
+                                          <TextField fx:id="staffEmail2" prefHeight="38.0" prefWidth="425.0" promptText="johndoe@gmail.com">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -370,7 +370,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="staffPhoneNo11" prefHeight="38.0" prefWidth="149.0" promptText="+234 1111 111 1111">
+                                          <TextField fx:id="staffPhoneNo2" prefHeight="38.0" prefWidth="149.0" promptText="+234 1111 111 1111">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -384,7 +384,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <DatePicker fx:id="staffDOB11" prefHeight="38.0" prefWidth="223.0" />
+                                          <DatePicker fx:id="staffDOB2" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="253.0" layoutY="85.0">
@@ -394,7 +394,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ChoiceBox fx:id="staffGender11" prefHeight="38.0" prefWidth="223.0" />
+                                          <ChoiceBox fx:id="staffGender2" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="496.0" layoutY="85.0">
@@ -404,7 +404,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ChoiceBox fx:id="staffDepartment11" prefHeight="38.0" prefWidth="223.0" />
+                                          <ChoiceBox fx:id="staffDepartment2" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="739.0" layoutY="85.0">
@@ -414,7 +414,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ChoiceBox fx:id="staffRole11" prefHeight="38.0" prefWidth="223.0" />
+                                          <ChoiceBox fx:id="staffRole2" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -429,7 +429,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Rectangle fx:id="staffPassport11" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+                                          <Rectangle fx:id="staffPassport2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
                                        </children>
                                     </VBox>
                                     <HBox spacing="20.0">
@@ -439,7 +439,7 @@
                                                 <Font size="14.0" />
                                              </font>
                                           </Button>
-                                          <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#Browse" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Browse" textFill="WHITE">
+                                          <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#changeProfile" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Browse" textFill="WHITE">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -452,12 +452,12 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="20.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="105.0" text="Search" textFill="WHITE">
+                              <Button fx:id="ResetPasswordBtn" mnemonicParsing="false" onAction="#ResetPassword" prefHeight="28.0" prefWidth="127.0" text="Reset Password" textFill="WHITE">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Button>
-                              <Button layoutX="1019.0" layoutY="10.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="105.0" text="Save changes" textFill="WHITE">
+                              <Button fx:id="updateStaffBtn" layoutX="1019.0" layoutY="10.0" mnemonicParsing="false" onAction="#UpdateStaff" prefHeight="32.0" prefWidth="105.0" text="Save changes" textFill="WHITE">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
