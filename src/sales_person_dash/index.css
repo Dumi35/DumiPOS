@@ -16,6 +16,20 @@
     -fx-border-color:grey;
 }
 
+.searchBar .text-field{
+    -fx-border-radius:15px;
+    -fx-background-radius: 15px;
+    -fx-background-color:white;
+    -fx-border-color:none;
+}
+
+.searchBar .arrow-button{
+    -fx-border-radius:0 15 15 0;
+    -fx-background-radius: 0 15 15 0;
+    
+    -fx-border-color:transparent;
+}
+
 .card{
     -fx-border-radius:15px;
     -fx-border-color: none;
@@ -91,24 +105,6 @@ Button{
     -fx-border-color: #2e3a6e;
 }
 
-/*search bar components*/
-.combo-box-popup {
-    -fx-background-color: red;
-    -fx-border-color: red;
-    -fx-border-width: 1px;
-    -fx-background-radius: 15px;
-    -fx-border-radius:15px;
-}
 
 
-/*Edit Normal Cell color */
-.combo-box .list-cell{
-    -fx-background-color: #F4F2F2;
-}
-
-/*Edit Cell Color Only when cursor hover cell */
-.combo-box .list-cell:hover{
-
-    -fx-background-color:green;
-}
 
