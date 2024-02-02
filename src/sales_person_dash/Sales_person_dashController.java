@@ -14,12 +14,15 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,6 +34,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model_classes.Product;
 import model_classes.Sale;
 import utility_classes.DatabaseConn;
@@ -80,37 +84,37 @@ public class Sales_person_dashController implements Initializable {
     private Label totalLabel;
 
     //retrieve all product data from database
-    public ObservableList<String> AllProductListData() throws SQLException {
+    public ObservableList<String> AllProductListSale() throws SQLException {
 
-        ObservableList<String> listDataNames = FXCollections.observableArrayList();//stores only product names
+        ObservableList<String> listSaleNames = FXCollections.observableArrayList();//stores only product names
 
         con = DatabaseConn.connectDB();
-        //read from Database table
+        //read from Salebase table
         try {
             ps = con.prepareStatement("SELECT * FROM products");
             result = ps.executeQuery();
 
-            Product allPData;
+            Product allPSale;
 
             while (result.next()) {
-                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"));
-                productList.add(allPData);
-                listDataNames.add(allPData.getName());
-                if (allPData.getStatus().equals("Low")) {
-                    LowStock.add(allPData.getName());
+                allPSale = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"));
+                productList.add(allPSale);
+                listSaleNames.add(allPSale.getName());
+                if (allPSale.getStatus().equals("Low")) {
+                    LowStock.add(allPSale.getName());
                 }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return listDataNames;
+        return listSaleNames;
     }
 
     public void autoCompleteSearch() throws SQLException {
 
         // Create a list with some dummy values.
-        ObservableList<String> items = FXCollections.observableArrayList(AllProductListData());
+        ObservableList<String> items = FXCollections.observableArrayList(AllProductListSale());
 
         // Set a custom cell factory for the ComboBox
         SearchProdCombo.setCellFactory(param -> new ListCell<String>() {
@@ -174,15 +178,15 @@ public class Sales_person_dashController implements Initializable {
         //NewSaleTable.getItems().add();
     }
 
-    //show all sale Data in tableview
-    public void ShowSaleData() throws SQLException {
-        //StaffData = AllStaffListData();
+    //show all sale Sale in tableview
+    public void ShowSaleSale() throws SQLException {
+        //StaffSale = AllStaffListSale();
         Code_col.setCellValueFactory(new PropertyValueFactory<>("Code"));
         Name_col.setCellValueFactory(new PropertyValueFactory<>("Name"));
         Quantity_col.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
         Amount_col.setCellValueFactory(new PropertyValueFactory<>("Price"));
 
-        //NewSaleTable.setItems(StaffData);
+        //NewSaleTable.setItems(StaffSale);
         //NewSaleTable.getC/;
     }
 
@@ -194,55 +198,127 @@ public class Sales_person_dashController implements Initializable {
                 for (Product p : productList) {
                     //add the new item
                     if (SearchProdCombo.getValue().equals(p.getName())) {
-                        
+
                         //fill table if empty
                         if (NewSaleTable.getItems().isEmpty()) {
                             Sale item = new Sale(p.getCode(), SearchProdCombo.getValue(), 1, p.getPrice()); //create sale item with code, name, qty, and price
                             NewSaleTable.getItems().add(item);
-                        } 
-                        
-                        //if not empty, check if item is already in cart/table
+                        } //if not empty, check if item is already in cart/table
                         else {
-                            for(int i=0; i<NewSaleTable.getItems().size();i++){
-                                Sale s =NewSaleTable.getItems().get(i);
+                            for (int i = 0; i < NewSaleTable.getItems().size(); i++) {
+                                Sale s = NewSaleTable.getItems().get(i);
                                 if (SearchProdCombo.getValue().equals(s.getName())) {
                                     //System.out.println("i'm already here");
-                                    s.setQuantity(s.getQuantity()+1);  
-                                    s.setPrice(p.getPrice()*s.getQuantity());
+                                    s.setQuantity(s.getQuantity() + 1);
+                                    s.setPrice(p.getPrice() * s.getQuantity());
                                     NewSaleTable.refresh();
                                     break;
                                 }
-                                if(i==NewSaleTable.getItems().size()-1){
+                                if (i == NewSaleTable.getItems().size() - 1) {
                                     Sale item = new Sale(p.getCode(), SearchProdCombo.getValue(), 0, p.getPrice()); //is adding an extra one for some reason but i can't be asked
                                     NewSaleTable.getItems().add(item);
                                 }
                             }
                         }
-                        
 
                     }
                 }
                 CalculateTotal();
             }
-            
+
         });
     }
 
     public void CalculateTotal() {
-        
-        int totalPrice=0;
-        for(Sale s: NewSaleTable.getItems()){
-            totalPrice = s.getPrice()+ totalPrice;
+
+        int totalPrice = 0;
+        for (Sale s : NewSaleTable.getItems()) {
+            totalPrice = s.getPrice() + totalPrice;
         }
         totalLabel.setText(String.valueOf(totalPrice));
+    }
+    
+    @FXML
+    public void ClearSales(){
+        NewSaleTable.getItems().clear();
+        CalculateTotal();
+    }
+
+    private void addButtonToTable() {
+        TableColumn<Sale, Void> colBtn = new TableColumn("");
+        colBtn.setPrefWidth(100);
+
+        Callback<TableColumn<Sale, Void>, TableCell<Sale, Void>> cellFactory = new Callback<TableColumn<Sale, Void>, TableCell<Sale, Void>>() {
+            public TableCell<Sale, Void> call(final TableColumn<Sale, Void> param) {
+                final TableCell<Sale, Void> cell = new TableCell<Sale, Void>() {
+
+                    Button addBtn = new Button("+");
+                    Button deleteBtn = new Button("-");
+
+                    //btn.setText("To");
+                    {
+                        addBtn.setStyle("-fx-text-fill: white; -fx-background-radius: 5px; -fx-border-radius:5px;-fx-padding:4;");
+                        addBtn.setPrefHeight(3);
+                        addBtn.setPrefWidth(40);
+                        //addBtn.setMaxSize(30, 20);
+                        deleteBtn.setStyle("-fx-text-fill: white; -fx-background-radius: 5px; -fx-border-radius:5px;-fx-padding:4;");
+                        deleteBtn.setPrefHeight(3);
+                        deleteBtn.setPrefWidth(40);
+
+                        addBtn.setOnAction((ActionEvent event) -> {
+                            Sale data = getTableView().getItems().get(getIndex());
+                            int price = data.getPrice() / data.getQuantity();//would give original price for one item
+                            data.setQuantity(data.getQuantity() + 1);
+                            data.setPrice(data.getQuantity() * price);
+                            CalculateTotal();
+                            NewSaleTable.refresh();
+                        });
+
+                        //reduce number in table
+                        deleteBtn.setOnAction((ActionEvent event) -> {
+                            Sale data = getTableView().getItems().get(getIndex());
+                            int price = data.getPrice() / data.getQuantity();//would give original price for one item
+                            //if 1 item in table and delete is done, delete
+                            if (data.getQuantity() == 1) {
+                                NewSaleTable.getItems().remove(data);
+                            } else { //reduce quantity by 1
+                                data.setQuantity(data.getQuantity() - 1);
+                                data.setPrice(data.getQuantity() * price);
+                                NewSaleTable.refresh();
+                            }
+                            CalculateTotal();
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            HBox buttonBox = new HBox(addBtn, deleteBtn);
+                            buttonBox.setSpacing(10);
+                            setGraphic(buttonBox);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colBtn.setCellFactory(cellFactory);
+
+        NewSaleTable.getColumns().add(colBtn);
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             autoCompleteSearch();
-            ShowSaleData();
+            ShowSaleSale();
             addSaleItem();
+            addButtonToTable();
         } catch (SQLException ex) {
             Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
