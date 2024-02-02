@@ -6,22 +6,27 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,15 +34,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model_classes.Product;
 import model_classes.Sale;
 import utility_classes.DatabaseConn;
+import utility_classes.MyPrinter;
 
 public class Sales_person_dashController implements Initializable {
 
@@ -45,12 +55,7 @@ public class Sales_person_dashController implements Initializable {
     private VBox sideBar;
     @FXML
     private HBox DashboardTab;
-    @FXML
-    private HBox RegisterUserTab;
-    @FXML
-    private HBox UpdateUserTab;
-    @FXML
-    private HBox BackUpTab;
+
     @FXML
     private ComboBox<String> SearchProdCombo;
     @FXML
@@ -82,6 +87,24 @@ public class Sales_person_dashController implements Initializable {
     private ObservableList<Product> productList = FXCollections.observableArrayList();//stores all product attributes
     @FXML
     private Label totalLabel;
+    @FXML
+    private ScrollPane Receipt;
+
+    private MyPrinter printer = new MyPrinter();
+    @FXML
+    private HBox RegisterUserTab;
+    @FXML
+    private VBox ReceiptItems;
+    @FXML
+    private Button acceptBtn;
+    @FXML
+    private Button printBtn;
+    @FXML
+    private Label ReceiptDate;
+    @FXML
+    private BorderPane ReceiptBorderPane;
+    @FXML
+    private Label ReceiptTotal;
 
     //retrieve all product data from database
     public ObservableList<String> AllProductListSale() throws SQLException {
@@ -91,7 +114,9 @@ public class Sales_person_dashController implements Initializable {
         con = DatabaseConn.connectDB();
         //read from Salebase table
         try {
-            ps = con.prepareStatement("SELECT * FROM products");
+            //retrieve goods that are not about to expire so more than 5 days from the expiry date
+            ps = con.prepareStatement("SELECT * FROM products WHERE Expiry_Date > '2024-02-02' ");
+            //ps = con.prepareStatement("SELECT * FROM products");
             result = ps.executeQuery();
 
             Product allPSale;
@@ -172,22 +197,24 @@ public class Sales_person_dashController implements Initializable {
 
     }
 
-    //load product into table
-    public void addProductToSale() {
-        SearchProdCombo.getValue();
-        //NewSaleTable.getItems().add();
-    }
+    
 
     //show all sale Sale in tableview
-    public void ShowSaleSale() throws SQLException {
-        //StaffSale = AllStaffListSale();
+    public void ShowSaleTable() throws SQLException {
         Code_col.setCellValueFactory(new PropertyValueFactory<>("Code"));
         Name_col.setCellValueFactory(new PropertyValueFactory<>("Name"));
         Quantity_col.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
         Amount_col.setCellValueFactory(new PropertyValueFactory<>("Price"));
 
-        //NewSaleTable.setItems(StaffSale);
-        //NewSaleTable.getC/;
+        // Define a custom formatter for the desired format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+
+        // Format the LocalDate object using the formatter
+        String formattedDate = LocalDate.now().format(formatter); //get current date
+
+        //display date on receipt
+        ReceiptDate.setText(String.valueOf(formattedDate));
+
     }
 
     public void addSaleItem() {
@@ -237,10 +264,11 @@ public class Sales_person_dashController implements Initializable {
         }
         totalLabel.setText(String.valueOf(totalPrice));
     }
-    
+
     @FXML
-    public void ClearSales(){
+    public void ClearSales() {
         NewSaleTable.getItems().clear();
+        ReceiptItems.getChildren().clear();
         CalculateTotal();
     }
 
@@ -312,13 +340,64 @@ public class Sales_person_dashController implements Initializable {
 
     }
 
+    //disable accept btn and print btn
+    public void acceptPayment() {
+
+        NewSaleTable.getItems().addListener((ListChangeListener<Object>) c -> {
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (NewSaleTable.getItems().isEmpty()) {
+                    // If the table is empty, disable the buttons
+                    acceptBtn.setDisable(true);
+                    printBtn.setDisable(true);
+                } else {
+                    // If the table is not empty, enable the buttons
+                    acceptBtn.setDisable(false);
+                    //printBtn.setDisable(false);
+                }
+            });
+        });
+
+    }
+
+    @FXML
+    public void createReceipt() {
+
+        for (Sale s : NewSaleTable.getItems()) {
+            Text ReceiptText = new Text(s.getName() + "\t\t\t\t\t\t\t" + s.getQuantity() + "\t\t\t\t\t\t\t" + s.getPrice());
+            ReceiptItems.getChildren().add(ReceiptText);
+        }
+        ReceiptTotal.setText(totalLabel.getText());
+        printBtn.setDisable(false);
+        acceptBtn.setDisable(true);
+    }
+
+    //print receipt
+    @FXML
+    private void printReceipt() {
+        Rectangle printBounds = new Rectangle(ReceiptBorderPane.getWidth(), ReceiptBorderPane.getHeight());
+        printer.setPrintRectangle(printBounds);
+
+        // Create and configure a PrinterJob
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null) {
+            // Print the script VBox using the NodePrinter class
+            boolean success = printer.print(job, true, ReceiptBorderPane);
+            if (success) {
+                job.endJob(); // Only call this if printing is successful
+            }
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             autoCompleteSearch();
-            ShowSaleSale();
+            ShowSaleTable();
             addSaleItem();
             addButtonToTable();
+            acceptPayment();
+            //createReceipt();
         } catch (SQLException ex) {
             Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
