@@ -35,7 +35,7 @@
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icon-park_ad-product.png" />
+                        <Image url="@../images/material-symbols_dashboard-outline.png" />
                      </image>
                   </ImageView>
                   <Label text="Dashboard" />
@@ -48,7 +48,7 @@
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icon-park_ad-product.png" />
+                        <Image url="@../images/iconamoon_profile-bold.png" />
                      </image>
                   </ImageView>
                   <Label text="Register User" textFill="WHITE" />
@@ -61,7 +61,7 @@
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/solar_hand-money-outline.png" />
+                        <Image url="@../images/ph_pen-bold.png" />
                      </image>
                   </ImageView>
                   <Label text="Update User" textFill="WHITE" />
@@ -74,7 +74,7 @@
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/solar_delivery-linear.png" />
+                        <Image url="@../images/lucide_database-backup.png" />
                      </image>
                   </ImageView>
                   <Label text="Back Up" textFill="WHITE" />
@@ -104,10 +104,13 @@
                      </padding>
                   </TextField>
                   <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Label minWidth="-Infinity" prefHeight="20.0" prefWidth="89.0" text="Dumebi Duru">
+                  <Label fx:id="userName" alignment="CENTER_RIGHT" minWidth="-Infinity" prefHeight="20.0" prefWidth="182.0" text="Dumebi Duru">
                      <font>
                         <Font name="Outfit Thin" size="14.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </Label>
                   <Circle fx:id="profile_pic" fill="#f4f2f2" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
                </children>
@@ -150,8 +153,8 @@
                               <TableColumn fx:id="Phone_No_col" prefWidth="126.0" text="Phone_No" />
                               <TableColumn fx:id="DOB_col" prefWidth="142.0" text="Date of Birth" />
                               <TableColumn fx:id="Gender_col" prefWidth="132.0" text="Gender" />
-                              <TableColumn fx:id="Dept_col" prefWidth="189.0" text="Department" />
-                              <TableColumn fx:id="Role_col" prefWidth="152.0" text="Role" />
+                              <TableColumn fx:id="Dept_col" prefWidth="159.0" text="Department" />
+                              <TableColumn fx:id="Role_col" prefWidth="150.0" text="Role" />
                            </columns>
                         </TableView>
                      </children>

@@ -6,9 +6,26 @@
     -fx-background-color: #2e3a6e;
 }
 
-.searchBar{
+.searchBar, .date-picker, .combo-box{
     -fx-border-radius:15px;
     -fx-background-radius: 15px;
+    
+}
+
+.combo-box{
+    -fx-background-color: #fff;
+    -fx-border-color:  #F4F2F2;
+}
+
+.date-picker .text-field {
+    -fx-border-radius:15px 0 0 15px;
+    -fx-background-radius: 15px 0 0 15px;
+}
+
+.date-picker .arrow-button{
+    -fx-border-radius:0 15 15 0;
+    -fx-background-radius: 0 15 15 0;
+    -fx-border-color:transparent;
 }
 
 .card{
@@ -19,9 +36,11 @@
 }
 
 Label, Button, TextArea, TableColumn, TextField, TableCell{
-    -fx-font-family: 'Outfit Regular', sans-serif;
     -fx-border-radius:5px;
     -fx-background-radius: 5px;
+}
+*{
+    -fx-font-family: 'Outfit Regular', sans-serif;
 }
 
 TableColumn{
@@ -45,9 +64,7 @@ TableView{
     -fx-border-color: white;
 }
 
-AnchorPane, VBox, HBox, BorderPane{
-    -fx-background-color: #fff;
-}
+
 
 /*Label{
     -fx-font-weight: 700;

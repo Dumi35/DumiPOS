@@ -191,13 +191,14 @@ public class IT_admin_dash_Controller implements Initializable {
     private Button updateStaffBtn;
     @FXML
     private Button ResetPasswordBtn;
+    @FXML
+    private Label userName;
 
-    public void setData() {
-
-        Image profileImage = new Image(getClass().getResource("../images/starfire.jpg").toExternalForm(), 150, 150, true, true);
-
-        profile_pic.setFill(new ImagePattern(profileImage));
-
+    
+    //load profile pic and username
+    public void setData(String name, Image pic) {
+        userName.setText(name);
+        profile_pic.setFill(new ImagePattern(pic));
     }
 
     //update and register staff pane functions
@@ -310,7 +311,7 @@ public class IT_admin_dash_Controller implements Initializable {
 
                 //send email
                 try {
-                    String body = "Dear " + staff.getName() + ", your registration as student for Dumi POS was successful. \nPlease find your login details below: \nEmail Address: " + staff.getEmail() + "\nPassword: " + password;
+                    String body = "Dear " + staff.getName() + ", your registration for Dumi POS was successful. \nPlease find your login details below: \nEmail Address: " + staff.getEmail() + "\nPassword: " + password;
 
                     Message message = (Message) new MimeMessage(session);
 
@@ -524,6 +525,7 @@ public class IT_admin_dash_Controller implements Initializable {
         }
     }
 
+    @FXML
     public void ResetPassword() throws NoSuchAlgorithmException, SQLException, IOException {
         String password = Hashing.generateRandomPassword(9);
         String salt = Hashing.generateSalt();
@@ -697,7 +699,6 @@ public class IT_admin_dash_Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        setData();
         staffDepartment1.getItems().addAll("Inventory", "Sales", "IT");
         staffDepartment1.setValue("Inventory");
         staffRole1.getItems().addAll("Manager");

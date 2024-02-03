@@ -84,11 +84,13 @@ public class Product {
         this.Quantity = Quantity;
         this.Price = Price;
         
-        if(this.Quantity<=10){
+        if(this.Quantity<=10 && this.Quantity>0){
             this.Status = "Low";//if quantity < 10, status is low
-        }else{
+        }else if (this.Quantity==0){
+            this.Status = "Out of stock";
+        } else{
             this.Status = "High";//if quantity < 10, status is low
-        } 
+        }
        
     }
     

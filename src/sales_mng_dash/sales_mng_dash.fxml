@@ -4,6 +4,8 @@
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -20,7 +22,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales_mng_dash.Sales_mng_dashController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" style="-fx-background-color: white;" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales_mng_dash.Sales_mng_dashController">
    <left>
       <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="162.0" spacing="10.0" styleClass="sideBar" stylesheets="@index.css" BorderPane.alignment="CENTER">
          <children>
@@ -29,7 +31,7 @@
                   <Image url="@../images/PAULogo_noBG.png" />
                </image>
             </ImageView>
-            <HBox alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
+            <HBox fx:id="DashboardTab" alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -82,27 +84,53 @@
                </padding>
             </HBox>
             <Line endX="67.5" startX="-100.0" stroke="#908c8c" />
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox fx:id="DailyReportsTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/tabler_report.png" />
                      </image>
                   </ImageView>
-                  <Label text="Reports" textFill="WHITE" />
+                  <Label text="Daily Reports" textFill="WHITE" />
                </children>
                <padding>
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="261.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <HBox fx:id="WeeklyReportsTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="272.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/iconamoon_profile-bold.png" />
+                        <Image url="@../images/tabler_report.png" />
                      </image>
                   </ImageView>
-                  <Label text="Sellers" textFill="WHITE" />
+                  <Label text="Weekly Reports" textFill="WHITE" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="MonthlyReportsTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="311.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+               <children>
+                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/tabler_report.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Monthly Reports" textFill="WHITE" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="YearlyReportsTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="350.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
+               <children>
+                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/tabler_report.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Yearly Reports" textFill="WHITE" />
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -120,7 +148,7 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F4F2F2;" BorderPane.alignment="CENTER">
          <top>
-            <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="588.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="588.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                <children>
                   <TextField focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="213.0" promptText="Search user" style="-fx-border-color: none;" styleClass="searchBar">
                      <padding>
@@ -144,20 +172,20 @@
             </HBox>
          </top>
          <center>
-            <StackPane fx:id="StackPane" BorderPane.alignment="CENTER">
+            <StackPane fx:id="StackPane" prefHeight="518.0" prefWidth="1154.0" BorderPane.alignment="CENTER">
                <children>
-                  <FlowPane hgap="20.0" prefHeight="585.0" prefWidth="1194.0" vgap="30.0">
+                  <FlowPane fx:id="DashboardTabPane" hgap="20.0" prefHeight="525.0" prefWidth="1154.0" vgap="30.0" visible="false">
                      <children>
-                        <VBox prefHeight="207.0" prefWidth="322.0" styleClass="card">
+                        <VBox prefHeight="212.0" prefWidth="322.0" styleClass="card">
                            <children>
                               <Label text="Total Products" textFill="#838080">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <Label text="1325">
+                              <Label fx:id="TotalProductsNumber" text="1325">
                                  <font>
-                                    <Font name="System Bold" size="28.0" />
+                                    <Font size="28.0" />
                                  </font>
                               </Label>
                               <AreaChart fx:id="areaChart1" style="-fx-legend-visible: false; -fx-horizontal-grid-lines-visible: false; -fx-horizontal-zero-line-visible: false; -fx-background-color: transparent; -fx-vertical-grid-lines-visible: false;">
@@ -175,16 +203,16 @@
                         </VBox>
                         <VBox layoutX="30.0" layoutY="40.0" prefHeight="200.0" prefWidth="322.0" styleClass="card">
                            <children>
-                              <VBox prefHeight="207.0" prefWidth="322.0" styleClass="card">
+                              <VBox prefHeight="206.0" prefWidth="322.0" styleClass="card">
                                  <children>
                                     <Label text="Total Sales" textFill="#838080">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label text="32500">
+                                    <Label fx:id="TotalSalesAmount" text="32500">
                                        <font>
-                                          <Font name="System Bold" size="28.0" />
+                                          <Font size="28.0" />
                                        </font>
                                     </Label>
                                     <AreaChart fx:id="areaChart2" style="-fx-legend-visible: false; -fx-horizontal-grid-lines-visible: false; -fx-horizontal-zero-line-visible: false; -fx-background-color: transparent; -fx-vertical-grid-lines-visible: false;">
@@ -202,7 +230,7 @@
                               </VBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="263.0" layoutY="40.0" prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                        <VBox layoutX="263.0" layoutY="40.0" prefHeight="223.0" prefWidth="415.0" styleClass="card">
                            <children>
                               <Label text="Invoices">
                                  <font>
@@ -241,7 +269,7 @@
                               </AreaChart>
                            </children>
                         </VBox>
-                        <VBox layoutX="30.0" layoutY="270.0" prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                        <VBox layoutX="30.0" layoutY="270.0" prefHeight="253.0" prefWidth="466.0" styleClass="card">
                            <children>
                               <Label text="Top selling products">
                                  <padding>
@@ -251,27 +279,428 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <TableView focusTraversable="false" prefHeight="200.0" prefWidth="200.0">
+                              <TableView fx:id="TopProductsTable" focusTraversable="false" prefHeight="193.0" prefWidth="466.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Code" />
-                                  <TableColumn prefWidth="199.0" text="Name" />
-                                    <TableColumn prefWidth="83.0" text="Quantity" />
-                                    <TableColumn prefWidth="108.0" text="Amount" />
+                                  <TableColumn fx:id="TopProductsCode" prefWidth="75.0" text="Code" />
+                                  <TableColumn fx:id="TopProductsName" prefWidth="166.0" text="Name" />
+                                    <TableColumn fx:id="TopProductsQuantity" prefWidth="108.0" text="Quantity" />
+                                    <TableColumn fx:id="TopProductsAmount" prefWidth="94.3" text="Amount" />
                                 </columns>
+                                 <padding>
+                                    <Insets left="10.0" right="10.0" />
+                                 </padding>
                               </TableView>
                            </children>
                         </VBox>
-                        <VBox layoutX="495.0" layoutY="270.0" prefHeight="200.0" prefWidth="319.0" styleClass="card" />
+                        <VBox layoutX="495.0" layoutY="270.0" prefHeight="200.0" prefWidth="280.0" styleClass="card" />
                      </children>
                      <padding>
-                        <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
+                        <Insets left="20.0" right="20.0" />
                      </padding>
                   </FlowPane>
+                  <VBox fx:id="DailyReportsTabPane" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Daily Reports">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="270.0" spacing="5.0">
+                                 <children>
+                                    <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/tabler_calendar-filled.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label text="Date" />
+                                    <DatePicker focusTraversable="false" prefHeight="29.0" prefWidth="181.0" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="51.0" prefWidth="218.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="72.0" prefWidth="1154.0" spacing="5.0">
+                           <children>
+                              <VBox prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Sales">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="10.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Profit">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#2da86e">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="172.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Loss">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#a63f2d">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
+                        <HBox>
+                           <children>
+                              <TableView fx:id="AllUsersTable" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                                 <columns>
+                                    <TableColumn fx:id="DailyCodeCol" prefWidth="75.0" text="Code" />
+                                    <TableColumn fx:id="DailyProdCol" prefWidth="199.0" text="Product" />
+                                    <TableColumn fx:id="DailyQtyCol" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="DailyAmountCol" prefWidth="126.0" text="Amount" />
+                                    <TableColumn fx:id="DailyStaffIDCol" prefWidth="146.0" text="Staff ID" />
+                                 </columns>
+                              </TableView>
+                              <Pane prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="WeeklyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Weekly Reports">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="546.0" spacing="5.0">
+                                 <children>
+                                    <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/tabler_calendar-filled.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label text="Week Range" />
+                                    <ComboBox fx:id="WeeklySalesMonth" focusTraversable="false" prefHeight="31.0" prefWidth="150.0" promptText="Week " />
+                                    <ComboBox focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
+                                    <ComboBox fx:id="WeeklySalesYear" focusTraversable="false" layoutX="230.0" layoutY="24.0" prefHeight="31.0" prefWidth="87.0" promptText="Year" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="51.0" prefWidth="218.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="72.0" prefWidth="1154.0" spacing="5.0">
+                           <children>
+                              <VBox prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Sales">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="10.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Profit">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#2da86e">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="172.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Loss">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#a63f2d">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
+                        <HBox>
+                           <children>
+                              <TableView fx:id="AllUsersTable1" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                                 <columns>
+                                    <TableColumn fx:id="DailyCodeCol1" prefWidth="75.0" text="Code" />
+                                    <TableColumn fx:id="DailyProdCol1" prefWidth="199.0" text="Product" />
+                                    <TableColumn fx:id="DailyQtyCol1" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="DailyAmountCol1" prefWidth="126.0" text="Amount" />
+                                    <TableColumn fx:id="DailyStaffIDCol1" prefWidth="146.0" text="Staff ID" />
+                                 </columns>
+                              </TableView>
+                              <Pane prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="MonthlyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Monthly Reports">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="546.0" spacing="5.0">
+                                 <children>
+                                    <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/tabler_calendar-filled.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label text="Month Range" />
+                                    <ComboBox focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
+                                    <ComboBox fx:id="MonthlySalesYear" focusTraversable="false" layoutX="230.0" layoutY="24.0" prefHeight="31.0" prefWidth="87.0" promptText="Year" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="51.0" prefWidth="218.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="72.0" prefWidth="1154.0" spacing="5.0">
+                           <children>
+                              <VBox prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Sales">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="10.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Profit">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#2da86e">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="172.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Loss">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#a63f2d">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
+                        <HBox>
+                           <children>
+                              <TableView fx:id="AllUsersTable11" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                                 <columns>
+                                    <TableColumn fx:id="DailyCodeCol11" prefWidth="75.0" text="Code" />
+                                    <TableColumn fx:id="DailyProdCol11" prefWidth="199.0" text="Product" />
+                                    <TableColumn fx:id="DailyQtyCol11" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="DailyAmountCol11" prefWidth="126.0" text="Amount" />
+                                    <TableColumn fx:id="DailyStaffIDCol11" prefWidth="146.0" text="Staff ID" />
+                                 </columns>
+                              </TableView>
+                              <Pane prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="YearlyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Yearly Reports">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="546.0" spacing="5.0">
+                                 <children>
+                                    <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/tabler_calendar-filled.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label text="Year Range" />
+                                    <ComboBox fx:id="YearlySalesYear" focusTraversable="false" layoutX="230.0" layoutY="24.0" prefHeight="31.0" prefWidth="87.0" promptText="Year" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="51.0" prefWidth="218.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="72.0" prefWidth="1154.0" spacing="5.0">
+                           <children>
+                              <VBox prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Sales">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="10.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Profit">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#2da86e">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="172.0" layoutY="10.0" prefHeight="72.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Total Loss">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="\$1000" textFill="#a63f2d">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
+                        <HBox>
+                           <children>
+                              <TableView fx:id="YearlyReportTable" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                                 <columns>
+                                    <TableColumn fx:id="YearlyCodeCol" prefWidth="75.0" text="Code" />
+                                    <TableColumn fx:id="YearlyProdCol" prefWidth="199.0" text="Product" />
+                                    <TableColumn fx:id="YearlyQuantityCol" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="YearlyAmountCol" prefWidth="126.0" text="Amount" />
+                                    <TableColumn fx:id="YearlyStaffIDCol" prefWidth="146.0" text="Staff ID" />
+                                 </columns>
+                              </TableView>
+                              <Pane prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
+               <BorderPane.margin>
+                  <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
+               </BorderPane.margin>
             </StackPane>
          </center>
          <bottom>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="1194.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="1194.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                <children>
                   <Label text="2024 Pan Atlantic University" />
                </children>

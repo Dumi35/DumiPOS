@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package login;
 
+import IT_admin_dash.IT_admin_dash_Controller;
+import Inventory_mng_dash.Inventory_mng_dashController;
 import utility_classes.DatabaseConn;
 import utility_classes.Hashing;
 import java.net.URL;
@@ -21,8 +19,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import components.alerts.AlertController;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import sales_person_dash.Sales_person_dashController;
 
 public class login_controller implements Initializable {
 
@@ -67,22 +69,44 @@ public class login_controller implements Initializable {
                     } catch (IOException e) {
                         System.out.println("error loading " + e);
                     }
+                    
                     //load respective dashboards
-                    //FXMLLoader loader = new FXMLLoader(getClass().getResource("sales_person_dash.fxml"));
                     stage = (Stage) loginEmail.getScene().getWindow();
+
+                    //GET profile pic/passport
+                    java.sql.Blob columnValue = null;
+                    columnValue = rs.getBlob("Passport");
+                    Image profileImage = null;
+
+                    if (columnValue != null) {
+                        byte[] imageData = columnValue.getBytes(1, (int) columnValue.length());
+                        profileImage = new Image(new ByteArrayInputStream(imageData));
+                    }
+
+                    //open dashboard and load profile pic
                     switch (rs.getString("Role")) {
                         case "Sales Person" -> {
-                            //loader = new FXMLLoader(getClass().getResource("sales_person_dash.fxml")); 
-                            root = FXMLLoader.load(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
+                            root = loader.load();
+                            Sales_person_dashController saleMngController = loader.getController();
+                            saleMngController.setData(rs.getString("Staff_Name"), profileImage,rs.getString("Staff_ID"));
+
                         }
                         case "Sales Manager" -> {
                             root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
                         }
-                        case "Manager" -> {
-                            root = FXMLLoader.load(getClass().getResource("../Inventory_mng_dash/Inventory_mng_dash.fxml"));
+                        case "Manager" -> {//for inventory manager
+                            //root = FXMLLoader.load(getClass().getResource("../Inventory_mng_dash/Inventory_mng_dash.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../Inventory_mng_dash/Inventory_mng_dash.fxml"));
+                            root = loader.load();
+                            Inventory_mng_dashController invMngController = loader.getController();
+                            invMngController.setData(rs.getString("Staff_Name"), profileImage);
                         }
                         case "Admin" -> {
-                            root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
+                            root = loader.load();
+                            IT_admin_dash_Controller adminController = loader.getController();
+                            adminController.setData(rs.getString("Staff_Name"), profileImage);
                         }
                         default -> {
 

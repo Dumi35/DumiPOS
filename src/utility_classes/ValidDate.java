@@ -1,33 +1,14 @@
 package utility_classes;
 
-import components.alerts.AlertController;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeParseException;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import static javafx.application.Application.launch;
-import javax.mail.Session;
+
 
 public class ValidDate {
-
-    //TOOLS FOR DATABASE
-    //private Statement statement;
-    //private static PreparedStatement ps;
-    //TOOLS FOR EMAIL
-    private Session session;
 
     public static String convertArrayListToString(ArrayList<String> array) {
         //convert the observable list to a string            

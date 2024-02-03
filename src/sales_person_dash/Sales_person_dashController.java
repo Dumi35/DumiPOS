@@ -1,15 +1,30 @@
 package sales_person_dash;
 
+import Inventory_mng_dash.Inventory_mng_dashController;
+import components.alerts.AlertController;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import static java.time.temporal.TemporalQueries.localDate;
+import java.time.temporal.WeekFields;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -18,9 +33,12 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -32,25 +50,36 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import model_classes.Product;
 import model_classes.Sale;
 import utility_classes.DatabaseConn;
 import utility_classes.MyPrinter;
+import utility_classes.ValidDate;
 
 public class Sales_person_dashController implements Initializable {
 
+    //ui tools
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+    
     @FXML
     private VBox sideBar;
     @FXML
@@ -105,6 +134,19 @@ public class Sales_person_dashController implements Initializable {
     private BorderPane ReceiptBorderPane;
     @FXML
     private Label ReceiptTotal;
+    @FXML
+    private Label userName;
+
+    private String salesPersonID;
+    @FXML
+    private Label ReceiptNumber;
+
+    //load profile pic and username
+    public void setData(String name, Image pic, String staffID) {
+        userName.setText(name);
+        profile_pic.setFill(new ImagePattern(pic));
+        salesPersonID = staffID;
+    }
 
     //retrieve all product data from database
     public ObservableList<String> AllProductListSale() throws SQLException {
@@ -115,7 +157,7 @@ public class Sales_person_dashController implements Initializable {
         //read from Salebase table
         try {
             //retrieve goods that are not about to expire so more than 5 days from the expiry date
-            ps = con.prepareStatement("SELECT * FROM products WHERE Expiry_Date > '2024-02-02' ");
+            ps = con.prepareStatement("SELECT * FROM products WHERE Expiry_Date > '2024-02-02' AND Quantity>0");
             //ps = con.prepareStatement("SELECT * FROM products");
             result = ps.executeQuery();
 
@@ -197,8 +239,6 @@ public class Sales_person_dashController implements Initializable {
 
     }
 
-    
-
     //show all sale Sale in tableview
     public void ShowSaleTable() throws SQLException {
         Code_col.setCellValueFactory(new PropertyValueFactory<>("Code"));
@@ -263,6 +303,7 @@ public class Sales_person_dashController implements Initializable {
             totalPrice = s.getPrice() + totalPrice;
         }
         totalLabel.setText(String.valueOf(totalPrice));
+        
     }
 
     @FXML
@@ -270,6 +311,36 @@ public class Sales_person_dashController implements Initializable {
         NewSaleTable.getItems().clear();
         ReceiptItems.getChildren().clear();
         CalculateTotal();
+        ReceiptTotal.setText(String.valueOf(0));
+    }
+
+    public void getWeek() {
+        String input = "2016-01-01";
+        String input2 = "2016-01-04";
+        String input3 = "2016-01-011";
+        String input4 = "201601015";
+        String format = "yyyyMMdd";
+        try {
+            LocalDate lclDate = LocalDate.now();
+            SimpleDateFormat df = new SimpleDateFormat(format);
+            Date date = df.parse(input3);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+            Locale enIsoLoc = Locale.forLanguageTag("en-u-fw-sun");
+            WeekFields.of(enIsoLoc).getFirstDayOfWeek(); // returns Sunday
+
+            //return the date of the first day of the week which is a Sunday
+            TemporalField fieldISO = WeekFields.of(enIsoLoc).dayOfWeek();
+            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 7));
+
+            System.out.println("Input " + input3 + " is in week " + week);
+            //return week;
+        } catch (ParseException e) {
+            System.out.println("Could not find a week in " + input);
+            //return 0;
+        }
     }
 
     private void addButtonToTable() {
@@ -361,12 +432,70 @@ public class Sales_person_dashController implements Initializable {
     }
 
     @FXML
-    public void createReceipt() {
-
-        for (Sale s : NewSaleTable.getItems()) {
-            Text ReceiptText = new Text(s.getName() + "\t\t\t\t\t\t\t" + s.getQuantity() + "\t\t\t\t\t\t\t" + s.getPrice());
-            ReceiptItems.getChildren().add(ReceiptText);
+    public void createReceipt() throws SQLException {
+        ps = con.prepareStatement("select MAX(Receipt_ID) AS LastReceiptNo FROM sale_receipts");
+        ResultSet rs = ps.executeQuery();
+        int receiptNo = 0;
+        while (rs.next()) {
+            receiptNo = (rs.getInt("LastReceiptNo")) + 1;
         }
+        if (receiptNo < 100) {
+            ReceiptNumber.setText("Receipt #" + String.format("%03d", receiptNo));//e.g display 12 as 012 or 99 as 099
+        }
+
+        //reduce stock number in products table and save item in receipt
+        ps = con.prepareStatement("select * from products");
+        rs = ps.executeQuery();
+
+//        TableView ReceiptTable = new TableView();
+//       TableColumn columnF1 = new TableColumn("Items");
+//        columnF1.setCellValueFactory(
+//                new PropertyValueFactory<>("Name"));
+//        
+//       TableColumn columnF2 = new TableColumn("Quantity");
+//        columnF2.setCellValueFactory(
+//                new PropertyValueFactory<>("Quantity"));
+//        
+//       TableColumn columnF3 = new TableColumn("Price");
+//        columnF3.setCellValueFactory(
+//                new PropertyValueFactory<>("Price"));
+
+        // Add column constraints to ensure equal width for each column
+//        columnF1.setPrefWidth(20);
+//        
+//        ReceiptTable.getColumns().addAll(columnF1, columnF2, columnF3);
+
+        while (rs.next()) {
+            for (Sale s : NewSaleTable.getItems()) {
+                //reduce stock no here
+                if (rs.getString("Product_Name").equals(s.getName())) {
+                    PreparedStatement prepare = con.prepareStatement("update products set Quantity = ? where Product_Name=?");
+                    prepare.setInt(1, rs.getInt("Quantity") - s.getQuantity());
+                    prepare.setString(2, rs.getString("Product_Name"));
+                    prepare.executeUpdate();
+
+                    //add item to receipt
+                    
+                    Text ReceiptText = new Text(String.format("%-50s", s.getName()) + String.format("%-50s", s.getQuantity()) + String.format("%-50s", s.getPrice()));
+                    ReceiptItems.getChildren().add(ReceiptText);
+                    
+                    prepare = con.prepareStatement("insert into sale_receipts values(?,?,?,?,?,?,?)");
+                    prepare.setInt(1, receiptNo);
+                    //ps.setString(6, salesPersonID);
+                    prepare.setString(2, s.getCode());
+                    prepare.setString(3, s.getName());
+                    prepare.setInt(4, s.getQuantity());
+                    prepare.setInt(5, s.getPrice());
+                    prepare.setString(6, "001");
+                    prepare.setObject(7,LocalDateTime.now());
+                    prepare.executeUpdate();
+                }
+
+            }
+        }
+        //ReceiptItems.getChildren().add(ReceiptTable);
+        
+
         ReceiptTotal.setText(totalLabel.getText());
         printBtn.setDisable(false);
         acceptBtn.setDisable(true);
@@ -388,6 +517,71 @@ public class Sales_person_dashController implements Initializable {
             }
         }
     }
+    
+    //update ui
+    // Method to update the UI with new data
+    public void UpdateUI() throws IOException {
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                // Update the UI on the JavaFX Application Thread
+                Platform.runLater(() -> {
+                    
+                    try {
+                        autoCompleteSearch();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                });
+
+            }
+        }, 0, 3000); // Update every 3 seconds
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                stage = (Stage) StackPane.getScene().getWindow();
+
+                //listen for when close button is clicked to stop the updateUI function
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        timer.cancel();
+                    }
+                });
+                Platform.runLater(() -> {
+                    
+                    try {
+                        // Update JavaFX UI components here
+                        DisplayBirthdays();
+                        // This code will run on the JavaFX Application Thread
+                    } catch (SQLException | IOException ex) {
+                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                });
+            }
+        };
+        timer.schedule(task, 3000);// Schedule the task to run once after 3 seconds 
+    }
+    
+    public void DisplayBirthdays() throws SQLException, IOException {
+        //load birthday alert
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+        
+        root = loader.load();
+        
+        AlertController ac = loader.getController();
+        if (ValidDate.isBirthday() != null) {
+            ac.SetContent("Today's bday celebs: " + ValidDate.isBirthday(), root, stage);
+        }
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -397,7 +591,9 @@ public class Sales_person_dashController implements Initializable {
             addSaleItem();
             addButtonToTable();
             acceptPayment();
-            //createReceipt();
+            getWeek();
+            //UpdateUI();
+
         } catch (SQLException ex) {
             Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
