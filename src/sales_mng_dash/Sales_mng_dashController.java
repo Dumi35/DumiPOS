@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package sales_mng_dash;
 
 import utility_classes.SwitchTabs;
@@ -12,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Random;
@@ -29,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -103,17 +101,17 @@ public class Sales_mng_dashController implements Initializable {
     @FXML
     private VBox DailyReportsTabPane;
     @FXML
-    private TableView<?> AllUsersTable;
+    private TableView<ReceiptItem> DailyReportTable;
     @FXML
-    private TableColumn<?, ?> DailyCodeCol;
+    private TableColumn<ReceiptItem, Integer> DailyQuantityCol;
     @FXML
-    private TableColumn<?, ?> DailyProdCol;
+    private TableColumn<ReceiptItem, String> DailyCodeCol;
     @FXML
-    private TableColumn<?, ?> DailyQtyCol;
+    private TableColumn<ReceiptItem, String> DailyProdCol;
     @FXML
-    private TableColumn<?, ?> DailyAmountCol;
+    private TableColumn<ReceiptItem, Integer> DailyAmountCol;
     @FXML
-    private TableColumn<?, ?> DailyStaffIDCol;
+    private TableColumn<ReceiptItem, String> DailyStaffIDCol;
     @FXML
     private VBox WeeklyReportsTabPane;
     @FXML
@@ -131,23 +129,11 @@ public class Sales_mng_dashController implements Initializable {
     @FXML
     private VBox MonthlyReportsTabPane;
     @FXML
-    private TableView<?> AllUsersTable11;
-    @FXML
-    private TableColumn<?, ?> DailyCodeCol11;
-    @FXML
-    private TableColumn<?, ?> DailyProdCol11;
-    @FXML
-    private TableColumn<?, ?> DailyQtyCol11;
-    @FXML
-    private TableColumn<?, ?> DailyAmountCol11;
-    @FXML
-    private TableColumn<?, ?> DailyStaffIDCol11;
-    @FXML
     private VBox YearlyReportsTabPane;
     @FXML
     private ComboBox<Integer> YearlySalesYear;
     @FXML
-    private ComboBox<?> WeeklySalesMonth;
+    private ComboBox<String> WeeklySalesMonth;
     @FXML
     private ComboBox<Integer> WeeklySalesYear;
     @FXML
@@ -164,6 +150,23 @@ public class Sales_mng_dashController implements Initializable {
     private TableColumn<ReceiptItem, Integer> YearlyAmountCol;
     @FXML
     private TableColumn<ReceiptItem, String> YearlyStaffIDCol;
+    @FXML
+    private ComboBox<String> MonthlySalesMonth;
+    @FXML
+    private TableColumn<ReceiptItem, String> MonthlyCodeCol;
+    @FXML
+    private TableColumn<ReceiptItem, String> MonthlyProdCol;
+    @FXML
+    private TableColumn<ReceiptItem, Integer> MonthlyAmountCol;
+    @FXML
+    private TableColumn<ReceiptItem, String> MonthlyStaffIDCol;
+    @FXML
+    private TableColumn<ReceiptItem, Integer> MonthlyQuantityCol;
+    @FXML
+    private TableView<ReceiptItem> MonthlyReportTable;
+    @FXML
+    private DatePicker DailyDatePicker;
+    
 
     public void setData() {
 
@@ -268,6 +271,17 @@ public class Sales_mng_dashController implements Initializable {
 
     }
 
+    //add months to combo box in weekly, monthly, yearly reports
+    public void addComboBoxMonths() {
+        ObservableList<String> monthsList = FXCollections.observableArrayList();
+        Month[] months = Month.values();
+        for (Month month : months) {
+            monthsList.add(String.valueOf(month));
+        }
+        WeeklySalesMonth.getItems().addAll(monthsList);
+        MonthlySalesMonth.getItems().addAll(monthsList);
+    }
+
     //add years to combo box in weekly, monthly, yearly reports
     public void addComboBoxYears() {
         ObservableList<Integer> years = FXCollections.observableArrayList();
@@ -277,6 +291,93 @@ public class Sales_mng_dashController implements Initializable {
         WeeklySalesYear.getItems().addAll(years);
         MonthlySalesYear.getItems().addAll(years);
         YearlySalesYear.getItems().addAll(years);
+    }
+
+    //daily reports pane
+    public void getDailySales() {
+        DailyCodeCol.setCellValueFactory(new PropertyValueFactory<>("Code"));
+        DailyProdCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        DailyQuantityCol.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
+        DailyAmountCol.setCellValueFactory(new PropertyValueFactory<>("Price"));
+        DailyStaffIDCol.setCellValueFactory(new PropertyValueFactory<>("StaffID"));
+
+        DailyDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            DailyReportTable.getItems().clear();
+            ObservableList<ReceiptItem> riData = FXCollections.observableArrayList();
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) // Set values for the second choice box based on the selected value of the first choice box
+                {
+                    try {
+                        //connect to db
+                        ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE DATE(Date_Of_Sale) = '" + java.sql.Date.valueOf(DailyDatePicker.getValue())+"'");//convert local date to sql date
+                        rs = ps.executeQuery();
+                        
+                        ReceiptItem ri;
+                        while (rs.next()) {
+                            ri = new ReceiptItem(rs.getString("Receipt_ID"), rs.getString("Item_Code"), rs.getString("Item_Name"), rs.getInt("Quantity"), rs.getInt("Amount"), rs.getString("Staff_ID"));
+                            riData.add(ri);
+                        }
+                        //LOAD DATE INTO TABLE
+                        DailyReportTable.getItems().addAll(riData);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        });
+
+    }
+    
+    //monthly reports pane
+    public void getMonthlySales() {
+        MonthlyCodeCol.setCellValueFactory(new PropertyValueFactory<>("Code"));
+        MonthlyProdCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        MonthlyQuantityCol.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
+        MonthlyAmountCol.setCellValueFactory(new PropertyValueFactory<>("Price"));
+        MonthlyStaffIDCol.setCellValueFactory(new PropertyValueFactory<>("StaffID"));
+
+        MonthlySalesMonth.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            MonthlyReportTable.getItems().clear();
+            
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) {
+                    loadMonthlyReportTable();
+                }
+            });
+        });
+        
+        MonthlySalesYear.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            MonthlyReportTable.getItems().clear();
+            
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) {
+                    loadMonthlyReportTable();
+                }
+            });
+        });
+
+    }
+
+    public void loadMonthlyReportTable() {
+        ObservableList<ReceiptItem> riData = FXCollections.observableArrayList();
+        try {
+            int monthno = Month.valueOf(MonthlySalesMonth.getValue()).getValue(); //mth no. for each mth eg 1 for jan
+            //connect to db
+            ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE MONTH(Date_Of_Sale) = " + monthno + " AND YEAR(Date_Of_Sale) = " + String.valueOf(MonthlySalesYear.getValue()));
+            rs = ps.executeQuery();
+            ReceiptItem ri;
+            while (rs.next()) {
+                ri = new ReceiptItem(rs.getString("Receipt_ID"), rs.getString("Item_Code"), rs.getString("Item_Name"), rs.getInt("Quantity"), rs.getInt("Amount"), rs.getString("Staff_ID"));
+                riData.add(ri);
+
+            }
+            MonthlyReportTable.getItems().addAll(riData);
+        } catch (SQLException ex) {
+            Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //yearly reports pane
@@ -326,6 +427,9 @@ public class Sales_mng_dashController implements Initializable {
             getTotalStats();
             getTopSellingProducts();
             addComboBoxYears();
+            addComboBoxMonths();
+            getDailySales();
+            getMonthlySales();
             getYearlySales();
         } catch (SQLException ex) {
             Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);

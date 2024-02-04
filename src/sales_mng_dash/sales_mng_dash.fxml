@@ -298,7 +298,7 @@
                         <Insets left="20.0" right="20.0" />
                      </padding>
                   </FlowPane>
-                  <VBox fx:id="DailyReportsTabPane" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
+                  <VBox fx:id="DailyReportsTabPane" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card">
                      <children>
                         <HBox alignment="CENTER_LEFT">
                            <children>
@@ -318,7 +318,7 @@
                                        </image>
                                     </ImageView>
                                     <Label text="Date" />
-                                    <DatePicker focusTraversable="false" prefHeight="29.0" prefWidth="181.0" />
+                                    <DatePicker fx:id="DailyDatePicker" focusTraversable="false" prefHeight="29.0" prefWidth="181.0" />
                                  </children>
                               </HBox>
                               <Pane prefHeight="51.0" prefWidth="218.0" />
@@ -382,13 +382,13 @@
                         <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
                         <HBox>
                            <children>
-                              <TableView fx:id="AllUsersTable" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                              <TableView fx:id="DailyReportTable" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
                                  <columns>
                                     <TableColumn fx:id="DailyCodeCol" prefWidth="75.0" text="Code" />
                                     <TableColumn fx:id="DailyProdCol" prefWidth="199.0" text="Product" />
-                                    <TableColumn fx:id="DailyQtyCol" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="DailyQuantityCol" prefWidth="177.0" text="Quantity" />
                                     <TableColumn fx:id="DailyAmountCol" prefWidth="126.0" text="Amount" />
-                                    <TableColumn fx:id="DailyStaffIDCol" prefWidth="146.0" text="Staff ID" />
+                                    <TableColumn fx:id="DailyStaffIDCol" prefWidth="143.2" text="Staff ID" />
                                  </columns>
                               </TableView>
                               <Pane prefHeight="200.0" prefWidth="200.0" />
@@ -417,7 +417,7 @@
                                     </ImageView>
                                     <Label text="Week Range" />
                                     <ComboBox fx:id="WeeklySalesMonth" focusTraversable="false" prefHeight="31.0" prefWidth="150.0" promptText="Week " />
-                                    <ComboBox focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
+                                    <ComboBox fx:id="WeeklySalesMonth" focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
                                     <ComboBox fx:id="WeeklySalesYear" focusTraversable="false" layoutX="230.0" layoutY="24.0" prefHeight="31.0" prefWidth="87.0" promptText="Year" />
                                  </children>
                               </HBox>
@@ -516,7 +516,7 @@
                                        </image>
                                     </ImageView>
                                     <Label text="Month Range" />
-                                    <ComboBox focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
+                                    <ComboBox fx:id="MonthlySalesMonth" focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
                                     <ComboBox fx:id="MonthlySalesYear" focusTraversable="false" layoutX="230.0" layoutY="24.0" prefHeight="31.0" prefWidth="87.0" promptText="Year" />
                                  </children>
                               </HBox>
@@ -581,13 +581,13 @@
                         <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
                         <HBox>
                            <children>
-                              <TableView fx:id="AllUsersTable11" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                              <TableView fx:id="MonthlyReportTable" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
                                  <columns>
-                                    <TableColumn fx:id="DailyCodeCol11" prefWidth="75.0" text="Code" />
-                                    <TableColumn fx:id="DailyProdCol11" prefWidth="199.0" text="Product" />
-                                    <TableColumn fx:id="DailyQtyCol11" prefWidth="177.0" text="Quantity" />
-                                    <TableColumn fx:id="DailyAmountCol11" prefWidth="126.0" text="Amount" />
-                                    <TableColumn fx:id="DailyStaffIDCol11" prefWidth="146.0" text="Staff ID" />
+                                    <TableColumn fx:id="MonthlyCodeCol" prefWidth="75.0" text="Code" />
+                                    <TableColumn fx:id="MonthlyProdCol" prefWidth="199.0" text="Product" />
+                                    <TableColumn fx:id="MonthlyQuantityCol" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="MonthlyAmountCol" prefWidth="126.0" text="Amount" />
+                                    <TableColumn fx:id="MonthlyStaffIDCol" prefWidth="143.2" text="Staff ID" />
                                  </columns>
                               </TableView>
                               <Pane prefHeight="200.0" prefWidth="200.0" />
@@ -595,7 +595,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="YearlyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card">
+                  <VBox fx:id="YearlyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
                      <children>
                         <HBox alignment="CENTER_LEFT">
                            <children>
@@ -685,7 +685,7 @@
                                     <TableColumn fx:id="YearlyProdCol" prefWidth="199.0" text="Product" />
                                     <TableColumn fx:id="YearlyQuantityCol" prefWidth="177.0" text="Quantity" />
                                     <TableColumn fx:id="YearlyAmountCol" prefWidth="126.0" text="Amount" />
-                                    <TableColumn fx:id="YearlyStaffIDCol" prefWidth="146.0" text="Staff ID" />
+                                    <TableColumn fx:id="YearlyStaffIDCol" prefWidth="143.2" text="Staff ID" />
                                  </columns>
                               </TableView>
                               <Pane prefHeight="200.0" prefWidth="200.0" />
