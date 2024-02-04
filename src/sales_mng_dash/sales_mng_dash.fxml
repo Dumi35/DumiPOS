@@ -298,7 +298,7 @@
                         <Insets left="20.0" right="20.0" />
                      </padding>
                   </FlowPane>
-                  <VBox fx:id="DailyReportsTabPane" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card">
+                  <VBox fx:id="DailyReportsTabPane" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
                      <children>
                         <HBox alignment="CENTER_LEFT">
                            <children>
@@ -396,7 +396,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="WeeklyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
+                  <VBox fx:id="WeeklyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card">
                      <children>
                         <HBox alignment="CENTER_LEFT">
                            <children>
@@ -408,7 +408,7 @@
                                     <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                                  </padding>
                               </Label>
-                              <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="546.0" spacing="5.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="575.0" spacing="5.0">
                                  <children>
                                     <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -416,8 +416,8 @@
                                        </image>
                                     </ImageView>
                                     <Label text="Week Range" />
-                                    <ComboBox fx:id="WeeklySalesMonth" focusTraversable="false" prefHeight="31.0" prefWidth="150.0" promptText="Week " />
-                                    <ComboBox fx:id="WeeklySalesMonth" focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="106.0" promptText="Month" />
+                                    <ComboBox fx:id="WeeklySalesWeek" focusTraversable="false" prefHeight="31.0" prefWidth="216.0" promptText="Week " />
+                                    <ComboBox fx:id="WeeklySalesMonth" focusTraversable="false" layoutX="75.0" layoutY="24.0" prefHeight="31.0" prefWidth="123.0" promptText="Month" />
                                     <ComboBox fx:id="WeeklySalesYear" focusTraversable="false" layoutX="230.0" layoutY="24.0" prefHeight="31.0" prefWidth="87.0" promptText="Year" />
                                  </children>
                               </HBox>
@@ -482,13 +482,13 @@
                         <Pane prefHeight="5.0" prefWidth="1154.0" style="-fx-background-color: #2e3a6e;" />
                         <HBox>
                            <children>
-                              <TableView fx:id="AllUsersTable1" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
+                              <TableView fx:id="WeeklyReportTable" focusTraversable="false" prefHeight="304.0" prefWidth="725.0">
                                  <columns>
-                                    <TableColumn fx:id="DailyCodeCol1" prefWidth="75.0" text="Code" />
-                                    <TableColumn fx:id="DailyProdCol1" prefWidth="199.0" text="Product" />
-                                    <TableColumn fx:id="DailyQtyCol1" prefWidth="177.0" text="Quantity" />
-                                    <TableColumn fx:id="DailyAmountCol1" prefWidth="126.0" text="Amount" />
-                                    <TableColumn fx:id="DailyStaffIDCol1" prefWidth="146.0" text="Staff ID" />
+                                    <TableColumn fx:id="WeeklyCodeCol" prefWidth="75.0" text="Code" />
+                                    <TableColumn fx:id="WeeklyProdCol" prefWidth="199.0" text="Product" />
+                                    <TableColumn fx:id="WeeklyQuantityCol" prefWidth="177.0" text="Quantity" />
+                                    <TableColumn fx:id="WeeklyAmountCol" prefWidth="126.0" text="Amount" />
+                                    <TableColumn fx:id="WeeklyStaffIDCol" prefWidth="143.2" text="Staff ID" />
                                  </columns>
                               </TableView>
                               <Pane prefHeight="200.0" prefWidth="200.0" />

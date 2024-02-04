@@ -122,18 +122,6 @@ public class Sales_mng_dashController implements Initializable {
     @FXML
     private VBox WeeklyReportsTabPane;
     @FXML
-    private TableView<?> AllUsersTable1;
-    @FXML
-    private TableColumn<?, ?> DailyCodeCol1;
-    @FXML
-    private TableColumn<?, ?> DailyProdCol1;
-    @FXML
-    private TableColumn<?, ?> DailyQtyCol1;
-    @FXML
-    private TableColumn<?, ?> DailyAmountCol1;
-    @FXML
-    private TableColumn<?, ?> DailyStaffIDCol1;
-    @FXML
     private VBox MonthlyReportsTabPane;
     @FXML
     private VBox YearlyReportsTabPane;
@@ -173,6 +161,20 @@ public class Sales_mng_dashController implements Initializable {
     private TableView<ReceiptItem> MonthlyReportTable;
     @FXML
     private DatePicker DailyDatePicker;
+    @FXML
+    private ComboBox<String> WeeklySalesWeek;
+    @FXML
+    private TableColumn<ReceiptItem, String> WeeklyCodeCol;
+    @FXML
+    private TableColumn<ReceiptItem, Integer> WeeklyQuantityCol;
+    @FXML
+    private TableColumn<ReceiptItem, Integer> WeeklyAmountCol;
+    @FXML
+    private TableColumn<ReceiptItem, String> WeeklyStaffIDCol;
+    @FXML
+    private TableView<ReceiptItem> WeeklyReportTable;
+    @FXML
+    private TableColumn<ReceiptItem, String> WeeklyProdCol;
 
     public void setData() {
 
@@ -336,11 +338,40 @@ public class Sales_mng_dashController implements Initializable {
     }
 
     //weekly reports pane
-    public void getWeek() {
+    //load week ranges based on month and year
+    public void getWeeklyRanges() {
 
+        WeeklySalesMonth.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            WeeklyReportTable.getItems().clear();
+
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) {
+                    getWeek();
+                }
+            });
+        });
+
+        WeeklySalesYear.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            WeeklyReportTable.getItems().clear();
+
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) {
+                    getWeek();
+                }
+            });
+        });
+    }
+
+    public void getWeek() {
+        WeeklySalesWeek.getItems().clear();
         int monthStart = 1;//first day of the month
-        int monthNo = Month.valueOf("FEBRUARY").getValue();
-        int yearNo = 2025;
+        //int monthNo = Month.valueOf("FEBRUARY").getValue();
+        int monthNo = Month.valueOf(WeeklySalesMonth.getValue()).getValue();
+        //Month.
+        //int yearNo = 2025;
+        int yearNo = WeeklySalesYear.getValue();
 
         boolean isLeapYear = false;
         if (yearNo % 4 == 0) {
@@ -349,9 +380,11 @@ public class Sales_mng_dashController implements Initializable {
         //int monthLength = Month.valueOf(MonthlySalesMonth.getValue()).length(isLeapYear); //RETURNS NO. OF DAYS IN A MONTH true means the year is a leap year
         int monthLength = Month.of(monthNo).length(isLeapYear); //RETURNS NO. OF DAYS IN A MONTH true means the year is a leap year
 
+        String weekRange = "";
+        //ObservableList<String> weekRangesOfMonth= FXCollections.observableArrayList();
         for (int i = 1; i <= 5; i++) { //deals with number of weeks in a month
             //DATE INPUT BY USER
-            
+
             LocalDate lclDate = LocalDate.of(yearNo, monthNo, monthStart);
             Locale enIsoLoc = Locale.forLanguageTag("en-u-fw-sun");
             WeekFields.of(enIsoLoc).getFirstDayOfWeek(); // returns Sunday
@@ -359,29 +392,72 @@ public class Sales_mng_dashController implements Initializable {
             //fieldISO, 1 return the date of the first day of the week which is a Sunday
             //fieldISO, 7 return the date of the last day of the week which is a Saturday
             TemporalField fieldISO = WeekFields.of(enIsoLoc).dayOfWeek();
-            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 1));
-            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 7));
-            
-            if (monthStart+7 > monthLength) {
+            String weekStart = String.valueOf(lclDate.with(fieldISO, 1));
+            String weekEnd = String.valueOf(lclDate.with(fieldISO, 7));
+
+            weekRange = weekStart + " to " + weekEnd;
+            WeeklySalesWeek.getItems().add(weekRange); //add values to combobox
+
+            if (monthStart + 7 > monthLength) {
                 break;
             }
             monthStart += 7;
         }
-        
-        System.out.println("monthstart "+monthStart);
+
         //get week of end month use June 2024 as ref to understand since last day was 29th Jun from loop
         if (monthLength > monthStart) {
             LocalDate lclDate = LocalDate.of(yearNo, monthNo, monthLength);
             Locale enIsoLoc = Locale.forLanguageTag("en-u-fw-sun");
             WeekFields.of(enIsoLoc).getFirstDayOfWeek(); // returns Sunday
 
-            //fieldISO, 1 return the date of the first day of the week which is a Sunday
-            //fieldISO, 7 return the date of the last day of the week which is a Saturday
             TemporalField fieldISO = WeekFields.of(enIsoLoc).dayOfWeek();
-            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 1));
-            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 7));
+            String weekStart = String.valueOf(lclDate.with(fieldISO, 1));
+            String weekEnd = String.valueOf(lclDate.with(fieldISO, 7));
+
+            weekRange = weekStart + " to " + weekEnd;
+            WeeklySalesWeek.getItems().add(weekRange);
         }
 
+    }
+
+    public void loadWeeklyReportTable() {
+        WeeklyCodeCol.setCellValueFactory(new PropertyValueFactory<>("Code"));
+        WeeklyProdCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        WeeklyQuantityCol.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
+        WeeklyAmountCol.setCellValueFactory(new PropertyValueFactory<>("Price"));
+        WeeklyStaffIDCol.setCellValueFactory(new PropertyValueFactory<>("StaffID"));
+
+        //event listener for cmobobox
+        WeeklySalesWeek.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            WeeklyReportTable.getItems().clear();
+            String[] weekRange = WeeklySalesWeek.getValue().split(" to ");
+            String weekStart = weekRange[0];
+            String weekEnd = weekRange[1];
+            System.out.println("start "+weekStart);
+            System.out.println("start "+weekEnd);
+
+            // Run the code later on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                if (null != newValue) {
+                    ObservableList<ReceiptItem> riData = FXCollections.observableArrayList();
+                    try {
+                        //connect to db
+                        ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE DATE(Date_Of_Sale) BETWEEN '" + weekStart + "' AND '" + weekEnd+"'");
+                        System.out.println("SELECT * FROM sale_receipts WHERE Date_Of_Sale BETWEEN '" + weekStart + "' AND '" + weekEnd+"'");
+                        rs = ps.executeQuery();
+                        ReceiptItem ri;
+                        while (rs.next()) {
+                            ri = new ReceiptItem(rs.getString("Receipt_ID"), rs.getString("Item_Code"), rs.getString("Item_Name"), rs.getInt("Quantity"), rs.getInt("Amount"), rs.getString("Staff_ID"));
+                            riData.add(ri);
+
+                        }
+                        WeeklyReportTable.getItems().addAll(riData);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        });
     }
 
     //monthly reports pane
@@ -484,9 +560,10 @@ public class Sales_mng_dashController implements Initializable {
             addComboBoxYears();
             addComboBoxMonths();
             getDailySales();
+            getWeeklyRanges();
             getMonthlySales();
             getYearlySales();
-            getWeek();
+            loadWeeklyReportTable();
         } catch (SQLException ex) {
             Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }

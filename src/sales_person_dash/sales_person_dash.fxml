@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" style="-fx-background-color: white;" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales_person_dash.Sales_person_dashController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales_person_dash.Sales_person_dashController">
    <left>
       <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="162.0" spacing="10.0" styleClass="sideBar" stylesheets="@../sales_mng_dash/index.css" BorderPane.alignment="CENTER">
          <children>
@@ -111,7 +111,7 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                            </padding>
                         </Label>
-                        <HBox prefHeight="424.0" prefWidth="993.0">
+                        <HBox prefHeight="424.0" prefWidth="993.0" style="-fx-background-color: white;">
                            <children>
                               <TableView fx:id="NewSaleTable" focusTraversable="false" prefHeight="417.0" prefWidth="682.0">
                                  <columns>
@@ -123,11 +123,11 @@
                               </TableView>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
                                  <children>
-                                    <ScrollPane fx:id="Receipt" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="445.0" vbarPolicy="NEVER">
+                                    <ScrollPane fx:id="Receipt" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="445.0" style="-fx-background-radius: 15; -fx-border-radius: 15;" vbarPolicy="NEVER">
                                        <content>
-                                          <BorderPane fx:id="ReceiptBorderPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="445.0">
+                                          <BorderPane fx:id="ReceiptBorderPane" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="445.0" style="-fx-background-radius: 15; -fx-border-radius: 15;">
                                              <top>
-                                                <HBox alignment="CENTER_LEFT" minHeight="-Infinity" prefHeight="70.0" prefWidth="445.0" style="-fx-background-color: #2e3a6e;" BorderPane.alignment="CENTER">
+                                                <HBox alignment="CENTER_LEFT" minHeight="-Infinity" prefHeight="70.0" prefWidth="445.0" style="-fx-background-color: #2e3a6e; -fx-background-radius: 15 15 0 0; -fx-border-radius: 15 15 0 0;" BorderPane.alignment="CENTER">
                                                    <children>
                                                       <ImageView fitHeight="77.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -143,7 +143,7 @@
                                                 </HBox>
                                              </top>
                                              <center>
-                                                <VBox prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+                                                <VBox prefHeight="333.0" prefWidth="446.0" spacing="10.0" BorderPane.alignment="CENTER">
                                                    <children>
                                                       <Label fx:id="ReceiptDate" style="-fx-font-weight: 700;" text="January 28, 2024" />
                                                       <Line endX="304.29290771484375" endY="0.2928932309150696" startX="-100.0" />
