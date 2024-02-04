@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.MSGController">
+   <top>
+      <Label text="RUN AWAY FROM COMPUTER SCIENCE" BorderPane.alignment="CENTER" />
+   </top>
+   <center>
+      <Label text="Name" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+      <Label text="Price" BorderPane.alignment="CENTER" />
+   </left>
+</BorderPane>

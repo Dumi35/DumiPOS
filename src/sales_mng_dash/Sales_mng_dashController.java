@@ -7,10 +7,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -166,7 +173,6 @@ public class Sales_mng_dashController implements Initializable {
     private TableView<ReceiptItem> MonthlyReportTable;
     @FXML
     private DatePicker DailyDatePicker;
-    
 
     public void setData() {
 
@@ -310,9 +316,9 @@ public class Sales_mng_dashController implements Initializable {
                 {
                     try {
                         //connect to db
-                        ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE DATE(Date_Of_Sale) = '" + java.sql.Date.valueOf(DailyDatePicker.getValue())+"'");//convert local date to sql date
+                        ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE DATE(Date_Of_Sale) = '" + java.sql.Date.valueOf(DailyDatePicker.getValue()) + "'");//convert local date to sql date
                         rs = ps.executeQuery();
-                        
+
                         ReceiptItem ri;
                         while (rs.next()) {
                             ri = new ReceiptItem(rs.getString("Receipt_ID"), rs.getString("Item_Code"), rs.getString("Item_Name"), rs.getInt("Quantity"), rs.getInt("Amount"), rs.getString("Staff_ID"));
@@ -328,7 +334,56 @@ public class Sales_mng_dashController implements Initializable {
         });
 
     }
-    
+
+    //weekly reports pane
+    public void getWeek() {
+
+        int monthStart = 1;//first day of the month
+        int monthNo = Month.valueOf("FEBRUARY").getValue();
+        int yearNo = 2025;
+
+        boolean isLeapYear = false;
+        if (yearNo % 4 == 0) {
+            isLeapYear = true;
+        }
+        //int monthLength = Month.valueOf(MonthlySalesMonth.getValue()).length(isLeapYear); //RETURNS NO. OF DAYS IN A MONTH true means the year is a leap year
+        int monthLength = Month.of(monthNo).length(isLeapYear); //RETURNS NO. OF DAYS IN A MONTH true means the year is a leap year
+
+        for (int i = 1; i <= 5; i++) { //deals with number of weeks in a month
+            //DATE INPUT BY USER
+            
+            LocalDate lclDate = LocalDate.of(yearNo, monthNo, monthStart);
+            Locale enIsoLoc = Locale.forLanguageTag("en-u-fw-sun");
+            WeekFields.of(enIsoLoc).getFirstDayOfWeek(); // returns Sunday
+
+            //fieldISO, 1 return the date of the first day of the week which is a Sunday
+            //fieldISO, 7 return the date of the last day of the week which is a Saturday
+            TemporalField fieldISO = WeekFields.of(enIsoLoc).dayOfWeek();
+            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 1));
+            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 7));
+            
+            if (monthStart+7 > monthLength) {
+                break;
+            }
+            monthStart += 7;
+        }
+        
+        System.out.println("monthstart "+monthStart);
+        //get week of end month use June 2024 as ref to understand since last day was 29th Jun from loop
+        if (monthLength > monthStart) {
+            LocalDate lclDate = LocalDate.of(yearNo, monthNo, monthLength);
+            Locale enIsoLoc = Locale.forLanguageTag("en-u-fw-sun");
+            WeekFields.of(enIsoLoc).getFirstDayOfWeek(); // returns Sunday
+
+            //fieldISO, 1 return the date of the first day of the week which is a Sunday
+            //fieldISO, 7 return the date of the last day of the week which is a Saturday
+            TemporalField fieldISO = WeekFields.of(enIsoLoc).dayOfWeek();
+            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 1));
+            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 7));
+        }
+
+    }
+
     //monthly reports pane
     public void getMonthlySales() {
         MonthlyCodeCol.setCellValueFactory(new PropertyValueFactory<>("Code"));
@@ -339,7 +394,7 @@ public class Sales_mng_dashController implements Initializable {
 
         MonthlySalesMonth.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             MonthlyReportTable.getItems().clear();
-            
+
             // Run the code later on the JavaFX Application Thread
             Platform.runLater(() -> {
                 if (null != newValue) {
@@ -347,10 +402,10 @@ public class Sales_mng_dashController implements Initializable {
                 }
             });
         });
-        
+
         MonthlySalesYear.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             MonthlyReportTable.getItems().clear();
-            
+
             // Run the code later on the JavaFX Application Thread
             Platform.runLater(() -> {
                 if (null != newValue) {
@@ -431,6 +486,7 @@ public class Sales_mng_dashController implements Initializable {
             getDailySales();
             getMonthlySales();
             getYearlySales();
+            getWeek();
         } catch (SQLException ex) {
             Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }

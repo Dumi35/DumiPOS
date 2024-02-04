@@ -3,25 +3,14 @@ package sales_person_dash;
 import Inventory_mng_dash.Inventory_mng_dashController;
 import components.alerts.AlertController;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalField;
-import static java.time.temporal.TemporalQueries.localDate;
-import java.time.temporal.WeekFields;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,7 +42,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -314,34 +302,7 @@ public class Sales_person_dashController implements Initializable {
         ReceiptTotal.setText(String.valueOf(0));
     }
 
-    public void getWeek() {
-        String input = "2016-01-01";
-        String input2 = "2016-01-04";
-        String input3 = "2016-01-011";
-        String input4 = "201601015";
-        String format = "yyyyMMdd";
-        try {
-            LocalDate lclDate = LocalDate.now();
-            SimpleDateFormat df = new SimpleDateFormat(format);
-            Date date = df.parse(input3);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            int week = cal.get(Calendar.WEEK_OF_YEAR);
-
-            Locale enIsoLoc = Locale.forLanguageTag("en-u-fw-sun");
-            WeekFields.of(enIsoLoc).getFirstDayOfWeek(); // returns Sunday
-
-            //return the date of the first day of the week which is a Sunday
-            TemporalField fieldISO = WeekFields.of(enIsoLoc).dayOfWeek();
-            System.out.println("no idea what i'm doing " + lclDate.with(fieldISO, 7));
-
-            System.out.println("Input " + input3 + " is in week " + week);
-            //return week;
-        } catch (ParseException e) {
-            System.out.println("Could not find a week in " + input);
-            //return 0;
-        }
-    }
+    
 
     private void addButtonToTable() {
         TableColumn<Sale, Void> colBtn = new TableColumn("");
@@ -591,7 +552,7 @@ public class Sales_person_dashController implements Initializable {
             addSaleItem();
             addButtonToTable();
             acceptPayment();
-            getWeek();
+            
             //UpdateUI();
 
         } catch (SQLException ex) {
