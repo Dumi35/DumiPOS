@@ -72,10 +72,12 @@ public class Product {
     private Integer Quantity;
     private Integer Price;
     private String Status;
+    private String description;
+    private byte[] productPhoto;
    
     
       //create products constructor
-    public Product(String Code, String Name, String Manufacturer,Date Manu_Date, Date Expiry_Date, Integer Quantity,Integer Price){
+    public Product(String Code, String Name, String Manufacturer,Date Manu_Date, Date Expiry_Date, Integer Quantity,Integer Price, byte[] productPhoto, String description){
         this.Code = Code;
         this.Name = Name;
         this.Manufacturer = Manufacturer;
@@ -83,6 +85,8 @@ public class Product {
         this.Expiry_Date = Expiry_Date;
         this.Quantity = Quantity;
         this.Price = Price;
+        this.productPhoto = productPhoto;
+        this.description = description;
         
         if(this.Quantity<=10 && this.Quantity>0){
             this.Status = "Low";//if quantity < 10, status is low

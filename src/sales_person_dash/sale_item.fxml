@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="186.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Rectangle arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="119.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+      <VBox>
+         <children>
+            <Label prefHeight="23.0" prefWidth="186.0" text="Label" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label prefHeight="51.0" prefWidth="186.0" text="Very fancy item look prety lorem ipsum pisum ipsum" wrapText="true" />
+            <Label text="N200" textFill="#2e3a6e">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</VBox>

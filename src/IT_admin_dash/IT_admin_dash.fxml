@@ -135,7 +135,7 @@
                   <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
                </BorderPane.margin>
                <children>
-                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card" visible="false">
                      <children>
                         <Label text="All Users">
                            <font>
@@ -159,7 +159,7 @@
                         </TableView>
                      </children>
                   </VBox>
-                  <VBox fx:id="RegisterUserTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card" visible="false">
+                  <VBox fx:id="RegisterUserTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
                      <children>
                         <Label text="Create a new user">
                            <font>
@@ -278,7 +278,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Rectangle fx:id="staffPassport1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+                                          <Rectangle fx:id="staffPassport1" arcHeight="15.0" arcWidth="15.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
                                        </children>
                                     </VBox>
                                     <HBox spacing="20.0">

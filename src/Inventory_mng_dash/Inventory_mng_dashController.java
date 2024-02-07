@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -27,10 +28,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -91,24 +95,6 @@ public class Inventory_mng_dashController implements Initializable {
     @FXML
     private VBox DashboardTabPane;
     @FXML
-    private TableView<?> AllProductsTable1;
-    @FXML
-    private TableColumn<?, ?> code_col1;
-    @FXML
-    private TableColumn<?, ?> name_col1;
-    @FXML
-    private TableColumn<?, ?> manufacturer_col1;
-    @FXML
-    private TableColumn<?, ?> mfd_date_col1;
-    @FXML
-    private TableColumn<?, ?> exp_date_col1;
-    @FXML
-    private TableColumn<?, ?> quantity_col1;
-    @FXML
-    private TableColumn<?, ?> price_col1;
-    @FXML
-    private TableColumn<?, ?> status_col1;
-    @FXML
     private StackPane StackPane;
     @FXML
     private VBox NewProductTabPane;
@@ -123,6 +109,22 @@ public class Inventory_mng_dashController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    @FXML
+    private TextField ProdCode;
+    @FXML
+    private TextField ProdName;
+    @FXML
+    private TextField ProdManufacturer;
+    @FXML
+    private DatePicker ProdMFD;
+    @FXML
+    private DatePicker ProdEXP;
+    @FXML
+    private TextField ProdQuantity;
+    @FXML
+    private TextField ProdCost;
+    @FXML
+    private TextField ProdPrice;
 
     //load profile pic and username
     public void setData(String name, Image pic) {
@@ -140,7 +142,7 @@ public class Inventory_mng_dashController implements Initializable {
             public void run() {
                 // Update the UI on the JavaFX Application Thread
                 Platform.runLater(() -> {
-                    
+
                     try {
                         ShowProductData();
                     } catch (SQLException ex) {
@@ -165,7 +167,7 @@ public class Inventory_mng_dashController implements Initializable {
                     }
                 });
                 Platform.runLater(() -> {
-                    
+
                     try {
                         // Update JavaFX UI components here
                         DisplayBirthdays();
@@ -173,7 +175,7 @@ public class Inventory_mng_dashController implements Initializable {
                     } catch (SQLException | IOException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                 });
             }
         };
@@ -181,7 +183,7 @@ public class Inventory_mng_dashController implements Initializable {
     }
 
     //dashboard pane functions
-    //retrieve all staff data from database
+    //retrieve all product data from database
     public ObservableList<Product> AllProductListData() throws SQLException {
         ObservableList<Product> listData = FXCollections.observableArrayList();
 
@@ -210,7 +212,7 @@ public class Inventory_mng_dashController implements Initializable {
 
     private ObservableList<Product> ProductData;
 
-    //show all staff Data in tableview
+    //show all product Data in tableview
     public void ShowProductData() throws SQLException {
         ProductData = AllProductListData();
         colourStatusColumn();
@@ -228,9 +230,7 @@ public class Inventory_mng_dashController implements Initializable {
 
     public void colourStatusColumn() {
 
-        status_col.setCellFactory(new Callback<TableColumn<Product, String>,
-                TableCell<Product, String>>()
-        {
+        status_col.setCellFactory(new Callback<TableColumn<Product, String>, TableCell<Product, String>>() {
             @Override
             public TableCell<Product, String> call(
                     TableColumn<Product, String> param) {
@@ -240,7 +240,7 @@ public class Inventory_mng_dashController implements Initializable {
                         if (!empty) {
                             int currentIndex = indexProperty()
                                     .getValue() < 0 ? 0
-                                    : indexProperty().getValue();
+                                            : indexProperty().getValue();
                             String status_col = param
                                     .getTableView().getItems()
                                     .get(currentIndex).getStatus();
@@ -250,19 +250,19 @@ public class Inventory_mng_dashController implements Initializable {
                                 setStyle("-fx-font-weight: bold");
                                 setStyle("-fx-background-color: #AECFA2");
                                 setText(status_col);
-                            } else if (status_col.equals("Low")){
+                            } else if (status_col.equals("Low")) {
                                 setWidth(5);
                                 setTextFill(Color.WHITE);
                                 setStyle("-fx-font-weight: bold");
                                 setStyle("-fx-background-color: #E0C66B");
                                 setText(status_col);
-                            } else if (status_col.equals("Out of stock")){
+                            } else if (status_col.equals("Out of stock")) {
                                 setWidth(5);
                                 setTextFill(Color.WHITE);
                                 setStyle("-fx-font-weight: bold");
                                 setStyle("-fx-background-color: #FD776F");
                                 setText(status_col);
-                            } 
+                            }
                         }
                     }
                 };
@@ -271,14 +271,46 @@ public class Inventory_mng_dashController implements Initializable {
 
     }
 
+    //register staff pane functions
+    public void CreateStaff() {
+
+
+        Product prod = new Product(ProdCode.getText(), ProdName.getText(), ProdManufacturer.getText(), java.sql.Date.valueOf(ProdMFD.getValue()), java.sql.Date.valueOf(ProdEXP.getValue()), Integer.valueOf(ProdQuantity.getText()), Integer.valueOf(ProdPrice.getText()));
+
+        
+            try {
+                con = DatabaseConn.connectDB();
+                ps = con.prepareStatement("insert into prod values(?,?,?,?,?,?,?,?,?,?,?)");
+                ps.setString(1, ProdCode.getText());
+                ps.setString(2, ProdName.getText());
+                ps.setString(3, ProdManufacturer.getText());
+                ps.setDate(4, java.sql.Date.valueOf(ProdMFD.getValue()));
+                ps.setDate(5, java.sql.Date.valueOf(ProdEXP.getValue()));
+                ps.setInt(6, Integer.parseInt(ProdQuantity.getText()));
+                ps.setInt(7, Integer.parseInt(ProdCost.getText()));
+                ps.setInt(8, Integer.parseInt(ProdPrice.getText()));//selling price
+                ps.setObject(9, LocalDateTime.now());//date time
+               
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Registration");
+                alert.setContentText("Product successfully created");
+                alert.showAndWait();
+
+            } catch (SQLException e) {
+                //e.printStackTrace();
+                System.out.println("error " + e);
+            }
+        
+    }
+
     public void DisplayBirthdays() throws SQLException, IOException {
         //load birthday alert
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
         stage = (Stage) StackPane.getScene().getWindow();
-        
+
         root = loader.load();
 
-        
         AlertController ac = loader.getController();
         if (ValidDate.isBirthday() != null) {
             ac.SetContent("Today's bday celebs: " + ValidDate.isBirthday(), root, stage);
@@ -290,7 +322,7 @@ public class Inventory_mng_dashController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         SwitchTabs.switchTabs(sideBar, StackPane);
-        
+
         try {
             UpdateUI();
 

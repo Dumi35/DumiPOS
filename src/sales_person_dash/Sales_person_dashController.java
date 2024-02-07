@@ -152,7 +152,8 @@ public class Sales_person_dashController implements Initializable {
             Product allPSale;
 
             while (result.next()) {
-                allPSale = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"));
+                byte[] photo = null;
+                allPSale = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"),photo, result.getString("description"));
                 productList.add(allPSale);
                 listSaleNames.add(allPSale.getName());
                 if (allPSale.getStatus().equals("Low")) {
