@@ -93,5 +93,61 @@ public class Product {
         }
        
     }
+
+    /**
+     * @param Code the Code to set
+     */
+    public void setCode(String Code) {
+        this.Code = Code;
+    }
+
+    /**
+     * @param Name the Name to set
+     */
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+
+    /**
+     * @param Manufacturer the Manufacturer to set
+     */
+    public void setManufacturer(String Manufacturer) {
+        this.Manufacturer = Manufacturer;
+    }
+
+    /**
+     * @param Manu_Date the Manu_Date to set
+     */
+    public void setManu_Date(Date Manu_Date) {
+        this.Manu_Date = Manu_Date;
+    }
+
+    /**
+     * @param Expiry_Date the Expiry_Date to set
+     */
+    public void setExpiry_Date(Date Expiry_Date) {
+        this.Expiry_Date = Expiry_Date;
+    }
+
+    /**
+     * @param Quantity the Quantity to set
+     */
+    public void setQuantity(Integer Quantity) {
+        this.Quantity = Quantity;
+    }
+
+    /**
+     * @param Price the Price to set
+     */
+    public void setPrice(Integer Price) {
+        this.Price = Price;
+    }
+
+    /**
+     * @param Status the Status to set
+     */
+    public void setStatus(String Status) {
+        this.Status = Status;
+    }
     
 }
