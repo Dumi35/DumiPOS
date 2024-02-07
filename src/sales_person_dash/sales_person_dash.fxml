@@ -10,6 +10,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -27,7 +28,7 @@
                   <Image url="@../images/PAULogo_noBG.png" />
                </image>
             </ImageView>
-            <HBox fx:id="DashboardTab" alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
+            <HBox fx:id="SalesTab" alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="162.0" spacing="10.0">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -35,19 +36,6 @@
                      </image>
                   </ImageView>
                   <Label text="New Sale" />
-               </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </HBox>
-            <HBox fx:id="RegisterUserTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="105.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icon-park_ad-product.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Receipts" textFill="WHITE" />
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -101,7 +89,7 @@
                   <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
                </BorderPane.margin>
                <children>
-                  <VBox fx:id="DashboardTabPane" prefHeight="200.0" prefWidth="466.0" styleClass="card">
+                  <VBox fx:id="SalesTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="466.0" styleClass="card">
                      <children>
                         <Label text="New Sale">
                            <font>
@@ -111,21 +99,18 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                            </padding>
                         </Label>
-                        <HBox prefHeight="424.0" prefWidth="993.0" style="-fx-background-color: white;">
+                        <HBox>
                            <children>
-                              <TableView fx:id="NewSaleTable" focusTraversable="false" prefHeight="417.0" prefWidth="682.0">
-                                 <columns>
-                                    <TableColumn fx:id="Code_col" prefWidth="75.0" text="Code" />
-                                    <TableColumn fx:id="Name_col" prefWidth="199.0" text="Name" />
-                                    <TableColumn fx:id="Quantity_col" prefWidth="177.0" text="Quantity" />
-                                    <TableColumn fx:id="Amount_col" prefWidth="126.0" text="Amount" />
-                                 </columns>
-                              </TableView>
+                              <ScrollPane hbarPolicy="NEVER" style="-fx-background-color: white;" vbarPolicy="NEVER">
+                                 <content>
+                                    <FlowPane fx:id="SaleFlowPane" hgap="10.0" prefHeight="416.0" prefWidth="700.0" prefWrapLength="700.0" style="-fx-background-color: white;" vgap="20.0" />
+                                 </content>
+                              </ScrollPane>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
                                  <children>
-                                    <ScrollPane fx:id="Receipt" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="445.0" style="-fx-background-radius: 15; -fx-border-radius: 15;" vbarPolicy="NEVER">
+                                    <ScrollPane fx:id="Receipt" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="445.0" style="-fx-background-radius: 15; -fx-border-radius: 15;" vbarPolicy="NEVER">
                                        <content>
-                                          <BorderPane fx:id="ReceiptBorderPane" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="445.0" style="-fx-background-radius: 15; -fx-border-radius: 15;">
+                                          <BorderPane fx:id="ReceiptBorderPane" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="445.0" style="-fx-background-radius: 15; -fx-border-radius: 15;">
                                              <top>
                                                 <HBox alignment="CENTER_LEFT" minHeight="-Infinity" prefHeight="70.0" prefWidth="445.0" style="-fx-background-color: #2e3a6e; -fx-background-radius: 15 15 0 0; -fx-border-radius: 15 15 0 0;" BorderPane.alignment="CENTER">
                                                    <children>
@@ -147,8 +132,17 @@
                                                    <children>
                                                       <Label fx:id="ReceiptDate" style="-fx-font-weight: 700;" text="January 28, 2024" />
                                                       <Line endX="304.29290771484375" endY="0.2928932309150696" startX="-100.0" />
-                                                      <Label prefHeight="17.0" prefWidth="411.0" style="-fx-font-weight: 700;" text="Items                                            Quantity                              Price" />
-                                                      <VBox fx:id="ReceiptItems" />
+                                                      <VBox fx:id="ReceiptItems">
+                                                         <children>
+                                                            <TableView fx:id="NewSaleTable" focusTraversable="false" prefHeight="417.0" prefWidth="682.0">
+                                                               <columns>
+                                                                  <TableColumn fx:id="Name_col" editable="false" prefWidth="116.0" text="Name" />
+                                                                  <TableColumn fx:id="Quantity_col" editable="false" minWidth="0.0" prefWidth="93.0" text="Quantity" />
+                                                                  <TableColumn fx:id="Amount_col" prefWidth="93.0" text="Price" />
+                                                               </columns>
+                                                            </TableView>
+                                                         </children>
+                                                      </VBox>
                                                       <HBox>
                                                          <children>
                                                             <Label prefHeight="17.0" prefWidth="207.0" text="Total">
@@ -173,8 +167,12 @@
                                           </BorderPane>
                                        </content>
                                     </ScrollPane>
-                                 </children></VBox>
+                                 </children>
+                              </VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="1154.0" spacing="20.0">
                            <children>

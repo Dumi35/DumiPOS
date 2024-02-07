@@ -195,10 +195,10 @@ public class Inventory_mng_dashController implements Initializable {
 
             Product allPData;
 
-            while (result.next()) {
-                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"));
-                listData.add(allPData);
-            }
+//            while (result.next()) {
+//                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"));
+//                listData.add(allPData);
+//            }
 
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -275,7 +275,7 @@ public class Inventory_mng_dashController implements Initializable {
     public void CreateStaff() {
 
 
-        Product prod = new Product(ProdCode.getText(), ProdName.getText(), ProdManufacturer.getText(), java.sql.Date.valueOf(ProdMFD.getValue()), java.sql.Date.valueOf(ProdEXP.getValue()), Integer.valueOf(ProdQuantity.getText()), Integer.valueOf(ProdPrice.getText()));
+//        Product prod = new Product(ProdCode.getText(), ProdName.getText(), ProdManufacturer.getText(), java.sql.Date.valueOf(ProdMFD.getValue()), java.sql.Date.valueOf(ProdEXP.getValue()), Integer.valueOf(ProdQuantity.getText()), Integer.valueOf(ProdPrice.getText()));
 
         
             try {

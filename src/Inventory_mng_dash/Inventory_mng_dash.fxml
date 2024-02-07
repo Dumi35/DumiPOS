@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -17,6 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1363.0" style="-fx-background-color: white;" stylesheets="@../IT_admin_dash/index.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Inventory_mng_dash.Inventory_mng_dashController">
@@ -143,25 +145,25 @@
                         </TableView>
                      </children>
                   </VBox>
-                  <VBox fx:id="NewProductTabPane" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
+                  <VBox fx:id="RegisterUserTabPane" prefHeight="200.0" prefWidth="466.0" spacing="20.0" styleClass="card">
                      <children>
-                        <Label text="Create a new product">
+                        <Label text="Create a new user">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
                         <HBox spacing="30.0">
                            <children>
-                              <FlowPane hgap="20.0" prefHeight="374.0" prefWidth="636.0" vgap="10.0">
+                              <FlowPane hgap="20.0" prefHeight="507.0" prefWidth="636.0" vgap="10.0">
                                  <children>
                                     <VBox>
                                        <children>
-                                          <Label text="Code *">
+                                          <Label text="ID *">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="ProdCode" prefHeight="36.0" prefWidth="149.0" promptText="001">
+                                          <TextField fx:id="staffID1" prefHeight="36.0" prefWidth="149.0" promptText="001">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -175,7 +177,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="ProdName" prefHeight="38.0" prefWidth="300.0" promptText="Gala">
+                                          <TextField fx:id="staffName1" prefHeight="38.0" prefWidth="425.0" promptText="John Doe">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -184,12 +186,26 @@
                                     </VBox>
                                     <VBox layoutX="169.0" layoutY="10.0">
                                        <children>
-                                          <Label text="Manufacturer*">
+                                          <Label text="Email*">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="ProdManufacturer" prefHeight="38.0" prefWidth="469.0">
+                                          <TextField fx:id="staffEmail1" prefHeight="38.0" prefWidth="425.0" promptText="johndoe@gmail.com">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="649.0" layoutY="10.0">
+                                       <children>
+                                          <Label text="Phone Number *">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="staffPhoneNo1" prefHeight="38.0" prefWidth="149.0" promptText="+234 1111 111 1111">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -198,73 +214,80 @@
                                     </VBox>
                                     <VBox layoutX="10.0" layoutY="85.0">
                                        <children>
-                                          <Label text="Manufacturing Date*">
+                                          <Label text="Date of Birth *">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <DatePicker fx:id="ProdMFD" prefHeight="38.0" prefWidth="223.0" />
+                                          <DatePicker fx:id="staffDOB1" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
-                                    <VBox layoutX="10.0" layoutY="152.0">
+                                    <VBox layoutX="253.0" layoutY="85.0">
                                        <children>
-                                          <Label text="Expiry Date*">
+                                          <Label text="Gender *">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <DatePicker fx:id="ProdEXP" prefHeight="38.0" prefWidth="223.0" />
+                                          <ChoiceBox fx:id="staffGender1" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="496.0" layoutY="85.0">
                                        <children>
-                                          <Label text="Quantity *">
+                                          <Label text="Department *">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="ProdQuantity" prefHeight="38.0" prefWidth="223.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
+                                          <ChoiceBox fx:id="staffDepartment1" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                     <VBox layoutX="739.0" layoutY="85.0">
                                        <children>
-                                          <Label text="Cost Price *">
+                                          <Label text="Role *">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="ProdCost" prefHeight="38.0" prefWidth="223.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="253.0" layoutY="223.0">
-                                       <children>
-                                          <Label text="Selling Price *">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="ProdPrice" prefHeight="38.0" prefWidth="223.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
+                                          <ChoiceBox fx:id="staffRole1" prefHeight="38.0" prefWidth="223.0" />
                                        </children>
                                     </VBox>
                                  </children>
                               </FlowPane>
+                              <Pane prefHeight="401.0" prefWidth="4.0" style="-fx-border-color: grey; -fx-background-color: grey;" />
+                              <VBox spacing="20.0">
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <Label text="Passport *">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Rectangle fx:id="staffPassport1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+                                       </children>
+                                    </VBox>
+                                    <HBox spacing="20.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#OpenWebCam" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Webcam" textFill="WHITE">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#Browse" prefHeight="32.0" prefWidth="105.0" styleClass="Button-secondary" text="Browse" textFill="WHITE">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="1114.0">
+                        <HBox alignment="CENTER_RIGHT">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Create Product" textFill="WHITE">
+                              <Button mnemonicParsing="false" onAction="#CreateStaff" prefHeight="32.0" prefWidth="105.0" text="Create User" textFill="WHITE">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

@@ -1,6 +1,7 @@
 package model_classes;
 
 import java.util.Date;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -73,11 +74,11 @@ public class Product {
     private Integer Price;
     private String Status;
     private String description;
-    private byte[] productPhoto;
+    private Image productPhoto;
    
     
       //create products constructor
-    public Product(String Code, String Name, String Manufacturer,Date Manu_Date, Date Expiry_Date, Integer Quantity,Integer Price, byte[] productPhoto, String description){
+    public Product(String Code, String Name, String Manufacturer,Date Manu_Date, Date Expiry_Date, Integer Quantity,Integer Price, Image productPhoto, String description){
         this.Code = Code;
         this.Name = Name;
         this.Manufacturer = Manufacturer;
@@ -152,6 +153,34 @@ public class Product {
      */
     public void setStatus(String Status) {
         this.Status = Status;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the productPhoto
+     */
+    public Image getProductPhoto() {
+        return productPhoto;
+    }
+
+    /**
+     * @param productPhoto the productPhoto to set
+     */
+    public void setProductPhoto(Image productPhoto) {
+        this.productPhoto = productPhoto;
     }
     
 }
