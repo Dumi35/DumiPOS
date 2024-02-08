@@ -35,7 +35,7 @@
                <children>
                   <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icon-park_ad-product.png" />
+                        <Image url="@../images/material-symbols_dashboard-outline.png" />
                      </image>
                   </ImageView>
                   <Label text="Dashboard" />
@@ -174,7 +174,7 @@
          <center>
             <StackPane fx:id="StackPane" prefHeight="518.0" prefWidth="1154.0" BorderPane.alignment="CENTER">
                <children>
-                  <FlowPane fx:id="DashboardTabPane" hgap="20.0" prefHeight="525.0" prefWidth="1154.0" vgap="30.0" visible="false">
+                  <FlowPane fx:id="DashboardTabPane" hgap="20.0" prefHeight="525.0" prefWidth="1154.0" vgap="30.0">
                      <children>
                         <VBox prefHeight="212.0" prefWidth="322.0" styleClass="card">
                            <children>
@@ -292,7 +292,26 @@
                               </TableView>
                            </children>
                         </VBox>
-                        <VBox layoutX="495.0" layoutY="270.0" prefHeight="200.0" prefWidth="280.0" styleClass="card" />
+                        <VBox layoutX="495.0" layoutY="270.0" prefHeight="200.0" prefWidth="280.0" styleClass="card">
+                           <children>
+                              <HBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label prefHeight="51.0" prefWidth="256.0" text="To-do list">
+                                       <padding>
+                                          <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                       </padding>
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <ImageView fitHeight="22.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/charm_menu-kebab.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children></VBox>
                      </children>
                      <padding>
                         <Insets left="20.0" right="20.0" />
@@ -396,7 +415,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="WeeklyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card">
+                  <VBox fx:id="WeeklyReportsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="706.0" prefWidth="1154.0" spacing="5.0" styleClass="card" visible="false">
                      <children>
                         <HBox alignment="CENTER_LEFT">
                            <children>

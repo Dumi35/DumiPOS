@@ -2,6 +2,10 @@ package Inventory_mng_dash;
 
 import IT_admin_dash.IT_admin_dash_Controller;
 import components.alerts.AlertController;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -34,6 +38,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -46,6 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -54,6 +60,7 @@ import model_classes.Product;
 import model_classes.Product;
 import model_classes.Sale;
 import utility_classes.DatabaseConn;
+import utility_classes.Images;
 import utility_classes.SwitchTabs;
 import utility_classes.ValidDate;
 
@@ -96,9 +103,8 @@ public class Inventory_mng_dashController implements Initializable {
     private VBox DashboardTabPane;
     @FXML
     private StackPane StackPane;
-    @FXML
-    private VBox NewProductTabPane;
 
+    private static byte[] photo = null;
     //TOOLS FOR DATABASE
     private Connection con;
     //private Statement statement;
@@ -125,6 +131,12 @@ public class Inventory_mng_dashController implements Initializable {
     private TextField ProdCost;
     @FXML
     private TextField ProdPrice;
+    @FXML
+    private VBox RegisterUserTabPane;
+    @FXML
+    private TextArea ProdDescr;
+    @FXML
+    private Rectangle ProdPhoto;
 
     //load profile pic and username
     public void setData(String name, Image pic) {
@@ -194,11 +206,12 @@ public class Inventory_mng_dashController implements Initializable {
             result = ps.executeQuery();
 
             Product allPData;
+            Image image=null;
 
-//            while (result.next()) {
-//                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"));
-//                listData.add(allPData);
-//            }
+            while (result.next()) {
+                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"),image,result.getString("Description"));
+                listData.add(allPData);
+            }
 
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -271,16 +284,40 @@ public class Inventory_mng_dashController implements Initializable {
 
     }
 
-    //register staff pane functions
-    public void CreateStaff() {
+    //register product pane functions
+    @FXML
+    public void Browse() {
+        Images im = new Images();
+        photo = im.BrowseSystemImages(ProdPhoto);
+    }
+    
+    public void setDefaultProductPhoto() throws FileNotFoundException, IOException {
+        String filePath = "C:\\Users\\dumid\\Documents\\NetBeansProjects\\Dumi_POS_System\\src\\images\\default_product.png";
+        Image image = new Image("file:" + filePath, 150, 150, true, true);
 
+        ProdPhoto.setFill(new ImagePattern(image)); //set default passport image
 
-//        Product prod = new Product(ProdCode.getText(), ProdName.getText(), ProdManufacturer.getText(), java.sql.Date.valueOf(ProdMFD.getValue()), java.sql.Date.valueOf(ProdEXP.getValue()), Integer.valueOf(ProdQuantity.getText()), Integer.valueOf(ProdPrice.getText()));
+        File imageFile = new File(filePath);
+        FileInputStream fis = new FileInputStream(imageFile);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        byte[] Byte = new byte[1024];
+
+        for (int i; (i = fis.read(Byte)) != -1;) {
+            baos.write(Byte, 0, i);
+        }
+        photo = baos.toByteArray();
+    }
+    
+    @FXML
+    public void CreateProduct() {
+       // Image image = null;
+//        Product prod = new Product(ProdCode.getText(), ProdName.getText(), ProdManufacturer.getText(), java.sql.Date.valueOf(ProdMFD.getValue()), java.sql.Date.valueOf(ProdEXP.getValue()), Integer.valueOf(ProdQuantity.getText()), Integer.valueOf(ProdPrice.getText()),image,ProdDescr.getText());
 
         
             try {
                 con = DatabaseConn.connectDB();
-                ps = con.prepareStatement("insert into prod values(?,?,?,?,?,?,?,?,?,?,?)");
+                ps = con.prepareStatement("insert into products values(?,?,?,?,?,?,?,?,?,?,?)");
                 ps.setString(1, ProdCode.getText());
                 ps.setString(2, ProdName.getText());
                 ps.setString(3, ProdManufacturer.getText());
@@ -290,7 +327,10 @@ public class Inventory_mng_dashController implements Initializable {
                 ps.setInt(7, Integer.parseInt(ProdCost.getText()));
                 ps.setInt(8, Integer.parseInt(ProdPrice.getText()));//selling price
                 ps.setObject(9, LocalDateTime.now());//date time
+                ps.setBytes(10, photo);//date time
+                ps.setString(11, ProdDescr.getText());//date time
                
+                ps.executeUpdate();
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Registration");
@@ -322,7 +362,11 @@ public class Inventory_mng_dashController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         SwitchTabs.switchTabs(sideBar, StackPane);
-
+        try {
+            setDefaultProductPhoto();
+        } catch (IOException ex) {
+            Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             UpdateUI();
 

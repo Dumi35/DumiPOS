@@ -22,7 +22,7 @@ public class Dumi_POS_System extends Application {
     public void start(Stage stage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("../Inventory_mng_dash/Inventory_mng_dash.fxml"));
         

@@ -75,8 +75,6 @@ public class Sales_person_dashController implements Initializable {
 
     @FXML
     private VBox sideBar;
-    @FXML
-    private HBox DashboardTab;
 
     @FXML
     private ComboBox<String> SearchProdCombo;
@@ -84,8 +82,6 @@ public class Sales_person_dashController implements Initializable {
     private Circle profile_pic;
     @FXML
     private StackPane StackPane;
-    @FXML
-    private VBox DashboardTabPane;
 
     @FXML
     private TableColumn<Sale, String> Name_col;
@@ -133,19 +129,7 @@ public class Sales_person_dashController implements Initializable {
     @FXML
     private HBox SalesTab;
     @FXML
-    private HBox TestTab;
-    @FXML
     private VBox SalesTabPane;
-    @FXML
-    private TableView<?> NewSaleTable1;
-    @FXML
-    private TableColumn<?, ?> Code_col;
-    @FXML
-    private TableColumn<?, ?> Name_col1;
-    @FXML
-    private TableColumn<?, ?> Quantity_col1;
-    @FXML
-    private TableColumn<?, ?> Amount_col1;
 
     TableColumn<Sale, Void> colBtn = new TableColumn("");
 
@@ -168,14 +152,14 @@ public class Sales_person_dashController implements Initializable {
         //read from Salebase table
         try {
             //retrieve goods that are not about to expire so more than 5 days from the expiry date
-            ps = con.prepareStatement("SELECT * FROM products WHERE Expiry_Date > '" + java.time.LocalDate.now() + "' AND Quantity>0");
+            ps = con.prepareStatement("SELECT * FROM products WHERE Expiry_Date > '" + java.time.LocalDate.now() + "' AND Quantity>0 ORDER BY Product_Name");
 
             result = ps.executeQuery();
 
             Product allPSale;
 
             while (result.next()) {
-                //byte[] photo = result.getBytes("ProductPhoto");
+                System.out.println("product quantity "+result.getString("Product_Name")+" "+result.getInt("Quantity"));
                 java.sql.Blob columnValue = result.getBlob("Product_Photo");
 
                 Image image = new Image(getClass().getResource("../images/starfire.jpg").toExternalForm(), 150, 150, true, true);
@@ -381,6 +365,10 @@ public class Sales_person_dashController implements Initializable {
         Quantity_col.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
         Amount_col.setCellValueFactory(new PropertyValueFactory<>("Price"));
 
+        Name_col.setPrefWidth(189);
+        Quantity_col.setPrefWidth(106);
+        Amount_col.setPrefWidth(106);
+
         // Define a custom formatter for the desired format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
 
@@ -442,7 +430,6 @@ public class Sales_person_dashController implements Initializable {
             totalPrice = s.getPrice() + totalPrice;
         }
         totalLabel.setText(String.valueOf(totalPrice));
-        
 
     }
 
@@ -451,6 +438,7 @@ public class Sales_person_dashController implements Initializable {
         NewSaleTable.getItems().clear();
         //ReceiptItems.getChildren().clear();
         CalculateTotal();
+        SearchProdCombo.setValue("");
         ReceiptTotal.setText(String.valueOf(0));
         NewSaleTable.getColumns().remove(colBtn);
         addButtonToTable();
@@ -554,7 +542,7 @@ public class Sales_person_dashController implements Initializable {
         Name_col.setPrefWidth(189);
         Quantity_col.setPrefWidth(106);
         Amount_col.setPrefWidth(106);
-        
+
         ps = con.prepareStatement("select MAX(Receipt_ID) AS LastReceiptNo FROM sale_receipts");
         ResultSet rs = ps.executeQuery();
         int receiptNo = 0;
@@ -637,7 +625,7 @@ public class Sales_person_dashController implements Initializable {
                 });
 
             }
-        }, 0, 3000); // Update every 3 seconds
+        }, 0, 5000); // Update every 3 seconds
 
         TimerTask task = new TimerTask() {
             @Override
@@ -653,13 +641,13 @@ public class Sales_person_dashController implements Initializable {
                 });
                 Platform.runLater(() -> {
 
-                    try {
-                        // Update JavaFX UI components here
-                        DisplayBirthdays();
-                        // This code will run on the JavaFX Application Thread
-                    } catch (SQLException | IOException ex) {
-                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+//                    try {
+//                        // Update JavaFX UI components here
+//                        DisplayBirthdays();
+//                        // This code will run on the JavaFX Application Thread
+//                    } catch (SQLException | IOException ex) {
+//                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
 
                 });
             }
@@ -691,7 +679,7 @@ public class Sales_person_dashController implements Initializable {
             acceptPayment();
             VBoxAddSale();
             SwitchTabs.switchTabs(sideBar, StackPane);
-            //UpdateUI();
+           // UpdateUI();
         } catch (SQLException ex) {
             Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
