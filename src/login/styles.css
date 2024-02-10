@@ -1,0 +1,22 @@
+/* Example styles for the Alert dialog */
+
+/* Style the dialog pane */
+.alert-pane {
+    -fx-background-color: lightblue;
+}
+
+/* Style the header text */
+.alert-pane .header-panel .header-label {
+    -fx-text-fill: darkblue;
+}
+
+/* Style the content text */
+.alert-pane .content {
+    -fx-text-fill: green;
+}
+
+/* Style the buttons */
+.alert-pane .button-bar .button {
+    -fx-background-color: blue;
+    -fx-text-fill: white;
+}

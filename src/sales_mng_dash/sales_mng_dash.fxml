@@ -44,45 +44,6 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="105.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icon-park_ad-product.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Products" textFill="WHITE" />
-               </children>
-               <padding>
-                  <Insets left="10.0" /> 
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="144.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/solar_hand-money-outline.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Purchases" textFill="WHITE" />
-               </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="183.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/solar_delivery-linear.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Stocks" textFill="WHITE" />
-               </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </HBox>
             <Line endX="67.5" startX="-100.0" stroke="#908c8c" />
             <HBox fx:id="DailyReportsTab" alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="29.0" prefWidth="162.0" spacing="10.0" style="-fx-background-color: transparent;">
                <children>
@@ -156,10 +117,13 @@
                      </padding>
                   </TextField>
                   <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Label minWidth="-Infinity" prefHeight="20.0" prefWidth="89.0" text="Dumebi Duru">
+                  <Label fx:id="userName" alignment="CENTER_RIGHT" minWidth="-Infinity" prefHeight="20.0" prefWidth="182.0" text="Dumebi Duru">
                      <font>
                         <Font name="Outfit Thin" size="14.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </Label>
                   <Circle fx:id="profile_pic" fill="#f4f2f2" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
                </children>

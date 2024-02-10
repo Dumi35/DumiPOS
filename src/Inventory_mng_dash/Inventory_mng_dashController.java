@@ -62,7 +62,7 @@ import model_classes.Sale;
 import utility_classes.DatabaseConn;
 import utility_classes.Images;
 import utility_classes.SwitchTabs;
-import utility_classes.ValidDate;
+import utility_classes.NotificationClass;
 
 /**
  * FXML Controller class
@@ -106,7 +106,7 @@ public class Inventory_mng_dashController implements Initializable {
 
     private static byte[] photo = null;
     //TOOLS FOR DATABASE
-    private Connection con;
+    private Connection con = DatabaseConn.connectDB();
     //private Statement statement;
     private PreparedStatement ps;
     private ResultSet result;
@@ -132,16 +132,23 @@ public class Inventory_mng_dashController implements Initializable {
     @FXML
     private TextField ProdPrice;
     @FXML
-    private VBox RegisterUserTabPane;
-    @FXML
     private TextArea ProdDescr;
     @FXML
     private Rectangle ProdPhoto;
 
+    private String myEmail;
+    @FXML
+    private Label restockProdName;
+    @FXML
+    private TextField restockProdQty;
+    @FXML
+    private VBox NewProductTabPane;
+
     //load profile pic and username
-    public void setData(String name, Image pic) {
+    public void setData(String name, Image pic, String email) {
         userName.setText(name);
         profile_pic.setFill(new ImagePattern(pic));
+        myEmail = email;
     }
 
     // Method to update the UI with new data
@@ -157,7 +164,9 @@ public class Inventory_mng_dashController implements Initializable {
 
                     try {
                         ShowProductData();
-                    } catch (SQLException ex) {
+                        NotifyExpiryDate();
+                        NotifyLowStock();
+                    } catch (SQLException | IOException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
@@ -194,22 +203,75 @@ public class Inventory_mng_dashController implements Initializable {
         timer.schedule(task, 3000);// Schedule the task to run once after 3 seconds 
     }
 
+    public void NotifyLowStock() throws SQLException, IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+
+        root = loader.load();
+
+        AlertController ac = loader.getController();
+        String value = NotificationClass.LowStockLevels(myEmail);
+        if (value != null) {
+            ac.SetContent("Low stock levels: " + value, root, stage);
+        }
+    }
+
+    public void NotifyExpiryDate() throws SQLException, IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+
+        root = loader.load();
+
+        AlertController ac = loader.getController();
+        String value = NotificationClass.isExpiryDate(myEmail);
+        if (value != null) {
+            ac.SetContent("These items are about to expire: " + value, root, stage);
+        }
+
+    }
+
+    @FXML
+    public void ProductSelectData() throws SQLException {
+        Product qData = AllProductsTable.getSelectionModel().getSelectedItem();
+        int num = AllProductsTable.getSelectionModel().getSelectedIndex();
+
+        if ((num - 1) < - 1) {
+            return;
+        }
+        restockProdName.setText(String.valueOf(qData.getName()));
+    }
+
+    @FXML
+    public void RestockProduct() throws SQLException {
+        ps = con.prepareStatement("SELECT * FROM products where Product_Name =?");
+        ps.setString(1, restockProdName.getText());
+        result = ps.executeQuery();
+        if (result.next()) {
+            ps = con.prepareStatement("UPDATE products set Quantity=? where Product_Name =?");
+            ps.setInt(1, Integer.parseInt(restockProdQty.getText())+result.getInt("Quantity"));
+            ps.setString(2, restockProdName.getText());
+            ps.executeUpdate();
+        }
+    }
+
     //dashboard pane functions
     //retrieve all product data from database
     public ObservableList<Product> AllProductListData() throws SQLException {
         ObservableList<Product> listData = FXCollections.observableArrayList();
 
-        con = DatabaseConn.connectDB();
+        //con = DatabaseConn.connectDB();
         //read from Database table
         try {
             ps = con.prepareStatement("SELECT * FROM products");
             result = ps.executeQuery();
 
             Product allPData;
-            Image image=null;
+            Image image = null;
 
             while (result.next()) {
-                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"),image,result.getString("Description"));
+                allPData = new Product(result.getString("Product_Code"), result.getString("Product_Name"), result.getString("Manufacturer"), result.getDate("Manu_Date"), result.getDate("Expiry_Date"), result.getInt("Quantity"), result.getInt("Price"), image, result.getString("Description"));
                 listData.add(allPData);
             }
 
@@ -290,7 +352,7 @@ public class Inventory_mng_dashController implements Initializable {
         Images im = new Images();
         photo = im.BrowseSystemImages(ProdPhoto);
     }
-    
+
     public void setDefaultProductPhoto() throws FileNotFoundException, IOException {
         String filePath = "C:\\Users\\dumid\\Documents\\NetBeansProjects\\Dumi_POS_System\\src\\images\\default_product.png";
         Image image = new Image("file:" + filePath, 150, 150, true, true);
@@ -308,40 +370,39 @@ public class Inventory_mng_dashController implements Initializable {
         }
         photo = baos.toByteArray();
     }
-    
+
     @FXML
     public void CreateProduct() {
-       // Image image = null;
+        // Image image = null;
 //        Product prod = new Product(ProdCode.getText(), ProdName.getText(), ProdManufacturer.getText(), java.sql.Date.valueOf(ProdMFD.getValue()), java.sql.Date.valueOf(ProdEXP.getValue()), Integer.valueOf(ProdQuantity.getText()), Integer.valueOf(ProdPrice.getText()),image,ProdDescr.getText());
 
-        
-            try {
-                con = DatabaseConn.connectDB();
-                ps = con.prepareStatement("insert into products values(?,?,?,?,?,?,?,?,?,?,?)");
-                ps.setString(1, ProdCode.getText());
-                ps.setString(2, ProdName.getText());
-                ps.setString(3, ProdManufacturer.getText());
-                ps.setDate(4, java.sql.Date.valueOf(ProdMFD.getValue()));
-                ps.setDate(5, java.sql.Date.valueOf(ProdEXP.getValue()));
-                ps.setInt(6, Integer.parseInt(ProdQuantity.getText()));
-                ps.setInt(7, Integer.parseInt(ProdCost.getText()));
-                ps.setInt(8, Integer.parseInt(ProdPrice.getText()));//selling price
-                ps.setObject(9, LocalDateTime.now());//date time
-                ps.setBytes(10, photo);//date time
-                ps.setString(11, ProdDescr.getText());//date time
-               
-                ps.executeUpdate();
+        try {
+            //con = DatabaseConn.connectDB();
+            ps = con.prepareStatement("insert into products values(?,?,?,?,?,?,?,?,?,?,?)");
+            ps.setString(1, ProdCode.getText());
+            ps.setString(2, ProdName.getText());
+            ps.setString(3, ProdManufacturer.getText());
+            ps.setDate(4, java.sql.Date.valueOf(ProdMFD.getValue()));
+            ps.setDate(5, java.sql.Date.valueOf(ProdEXP.getValue()));
+            ps.setInt(6, Integer.parseInt(ProdQuantity.getText()));
+            ps.setInt(7, Integer.parseInt(ProdCost.getText()));
+            ps.setInt(8, Integer.parseInt(ProdPrice.getText()));//selling price
+            ps.setObject(9, LocalDateTime.now());//date time
+            ps.setBytes(10, photo);//date time
+            ps.setString(11, ProdDescr.getText());//date time
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Registration");
-                alert.setContentText("Product successfully created");
-                alert.showAndWait();
+            ps.executeUpdate();
 
-            } catch (SQLException e) {
-                //e.printStackTrace();
-                System.out.println("error " + e);
-            }
-        
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registration");
+            alert.setContentText("Product successfully created");
+            alert.showAndWait();
+
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            System.out.println("error " + e);
+        }
+
     }
 
     public void DisplayBirthdays() throws SQLException, IOException {
@@ -352,28 +413,24 @@ public class Inventory_mng_dashController implements Initializable {
         root = loader.load();
 
         AlertController ac = loader.getController();
-        if (ValidDate.isBirthday() != null) {
-            ac.SetContent("Today's bday celebs: " + ValidDate.isBirthday(), root, stage);
+        if (NotificationClass.isBirthday(myEmail) != null) {
+            ac.SetContent("Today's bday celebs: " + NotificationClass.isBirthday(myEmail), root, stage);
         }
 
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        SwitchTabs.switchTabs(sideBar, StackPane);
         try {
+            // TODO
+            NotificationClass.InitialiseCounters();
+            SwitchTabs.switchTabs(sideBar, StackPane);
             setDefaultProductPhoto();
-        } catch (IOException ex) {
+            UpdateUI();
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
-            UpdateUI();
 
-        } catch (IOException ex) {
-            Logger.getLogger(IT_admin_dash_Controller.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

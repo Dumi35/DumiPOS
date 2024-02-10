@@ -40,6 +40,9 @@ Label, Button{
     -fx-border-color: #2e3a6e;
 }
 
+.scroll-pane .viewport {
+    -fx-background-color: white; /* Set the background color of the content area */
+}
 
 
 

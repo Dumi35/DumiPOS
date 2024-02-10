@@ -73,7 +73,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import utility_classes.ValidDate;
+import utility_classes.NotificationClass;
 import javafx.scene.image.Image;
 
 public class IT_admin_dash_Controller implements Initializable {
@@ -186,11 +186,13 @@ public class IT_admin_dash_Controller implements Initializable {
     @FXML
     private Label userName;
 
+    private String myEmail;
     
     //load profile pic and username
-    public void setData(String name, Image pic) {
+    public void setData(String name, Image pic,String email) {
         userName.setText(name);
         profile_pic.setFill(new ImagePattern(pic));
+        myEmail = email;
     }
 
     //update and register staff pane functions
@@ -411,9 +413,9 @@ public class IT_admin_dash_Controller implements Initializable {
             Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         AlertController ac = loader.getController();
-        if (ValidDate.isBirthday() != null) {
+        if (NotificationClass.isBirthday(myEmail) != null) {
             try {
-                ac.SetContent("Today's bday celebs: " + ValidDate.isBirthday(), root, stage);
+                ac.SetContent("Today's bday celebs: " + NotificationClass.isBirthday(myEmail), root, stage);
             } catch (SQLException ex) {
                 Logger.getLogger(IT_admin_dash_Controller.class.getName()).log(Level.SEVERE, null, ex);
             }

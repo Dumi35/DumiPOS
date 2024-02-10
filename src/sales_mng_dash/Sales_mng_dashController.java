@@ -1,5 +1,7 @@
 package sales_mng_dash;
 
+import Inventory_mng_dash.Inventory_mng_dashController;
+import components.alerts.AlertController;
 import utility_classes.SwitchTabs;
 import java.io.IOException;
 import java.net.URL;
@@ -20,12 +22,16 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
@@ -46,9 +52,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model_classes.Sale;
 import model_classes.ReceiptItem;
+import sales_person_dash.Sales_person_dashController;
 import utility_classes.DatabaseConn;
+import utility_classes.NotificationClass;
 
 /**
  * FXML Controller class
@@ -175,12 +184,99 @@ public class Sales_mng_dashController implements Initializable {
     private TableView<ReceiptItem> WeeklyReportTable;
     @FXML
     private TableColumn<ReceiptItem, String> WeeklyProdCol;
+    private String myEmail;
+    @FXML
+    private Label userName;
 
-    public void setData() {
+    //load profile pic and username
+    public void setData(String name, Image pic, String email) {
+        userName.setText(name);
+        profile_pic.setFill(new ImagePattern(pic));
+        myEmail = email;
+    }
 
-        Image profileImage = new Image(getClass().getResource("../images/starfire.jpg").toExternalForm(), 150, 150, true, true);
+    //update ui
+    // Method to update the UI with new data
+    public void UpdateUI() throws IOException {
+        Timer timer = new Timer();
 
-        profile_pic.setFill(new ImagePattern(profileImage));
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                // Update the UI on the JavaFX Application Thread
+                Platform.runLater(() -> {
+
+                    try {
+                        getTotalStats();
+                        getTopSellingProducts();
+                        NotifyExpiryDate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                });
+
+            }
+        }, 0, 5000); // Update every 3 seconds
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                stage = (Stage) StackPane.getScene().getWindow();
+
+                //listen for when close button is clicked to stop the updateUI function
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        timer.cancel();
+                    }
+                });
+                Platform.runLater(() -> {
+
+                    try {
+                        // Update JavaFX UI components here
+                        DisplayBirthdays();
+                        // This code will run on the JavaFX Application Thread
+                    } catch (SQLException | IOException ex) {
+                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                });
+            }
+        };
+        timer.schedule(task, 3000);// Schedule the task to run once after 3 seconds 
+    }
+
+    public void DisplayBirthdays() throws SQLException, IOException {
+        //load birthday alert
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+
+        root = loader.load();
+
+        AlertController ac = loader.getController();
+        if (NotificationClass.isBirthday(myEmail) != null) {
+            ac.SetContent("Today's bday celebs: " + NotificationClass.isBirthday(myEmail), root, stage);
+        }
+
+    }
+
+    public void NotifyExpiryDate() throws SQLException, IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+
+        root = loader.load();
+
+        AlertController ac = loader.getController();
+        String value = NotificationClass.isExpiryDate(myEmail);
+        if (value != null) {
+            ac.SetContent("These items are about to expire: " + value, root, stage);
+        }
+
     }
 
     private void setAreaChart1() {
@@ -259,7 +355,7 @@ public class Sales_mng_dashController implements Initializable {
         TopProductsName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         TopProductsQuantity.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
         TopProductsAmount.setCellValueFactory(new PropertyValueFactory<>("Price"));
-
+        TopProductsTable.getItems().clear();
         //ObservableList<String> TopProductsList = FXCollections.observableArrayList();
         Sale allPSale;
 
@@ -433,8 +529,8 @@ public class Sales_mng_dashController implements Initializable {
             String[] weekRange = WeeklySalesWeek.getValue().split(" to ");
             String weekStart = weekRange[0];
             String weekEnd = weekRange[1];
-            System.out.println("start "+weekStart);
-            System.out.println("start "+weekEnd);
+            System.out.println("start " + weekStart);
+            System.out.println("start " + weekEnd);
 
             // Run the code later on the JavaFX Application Thread
             Platform.runLater(() -> {
@@ -442,8 +538,8 @@ public class Sales_mng_dashController implements Initializable {
                     ObservableList<ReceiptItem> riData = FXCollections.observableArrayList();
                     try {
                         //connect to db
-                        ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE DATE(Date_Of_Sale) BETWEEN '" + weekStart + "' AND '" + weekEnd+"'");
-                        System.out.println("SELECT * FROM sale_receipts WHERE Date_Of_Sale BETWEEN '" + weekStart + "' AND '" + weekEnd+"'");
+                        ps = con.prepareStatement("SELECT * FROM sale_receipts WHERE DATE(Date_Of_Sale) BETWEEN '" + weekStart + "' AND '" + weekEnd + "'");
+                        System.out.println("SELECT * FROM sale_receipts WHERE Date_Of_Sale BETWEEN '" + weekStart + "' AND '" + weekEnd + "'");
                         rs = ps.executeQuery();
                         ReceiptItem ri;
                         while (rs.next()) {
@@ -550,7 +646,7 @@ public class Sales_mng_dashController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             // TODO
-            setData();
+            //setData();
             setAreaChart1();
             setAreaChart2();
             setAreaChart3();
@@ -563,8 +659,12 @@ public class Sales_mng_dashController implements Initializable {
             getWeeklyRanges();
             getMonthlySales();
             getYearlySales();
+            NotificationClass.InitialiseCounters();
             loadWeeklyReportTable();
+            UpdateUI();
         } catch (SQLException ex) {
+            Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(Sales_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

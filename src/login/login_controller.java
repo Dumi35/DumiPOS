@@ -24,6 +24,7 @@ import java.io.IOException;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
+import sales_mng_dash.Sales_mng_dashController;
 import sales_person_dash.Sales_person_dashController;
 
 public class login_controller implements Initializable {
@@ -69,7 +70,7 @@ public class login_controller implements Initializable {
                     } catch (IOException e) {
                         System.out.println("error loading " + e);
                     }
-                    
+
                     //load respective dashboards
                     stage = (Stage) loginEmail.getScene().getWindow();
 
@@ -89,24 +90,27 @@ public class login_controller implements Initializable {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("../sales_person_dash/sales_person_dash.fxml"));
                             root = loader.load();
                             Sales_person_dashController saleMngController = loader.getController();
-                            saleMngController.setData(rs.getString("Staff_Name"), profileImage,rs.getString("Staff_ID"));
+                            saleMngController.setData(rs.getString("Staff_Name"), profileImage, rs.getString("Staff_ID"),rs.getString("Email"));
 
                         }
                         case "Sales Manager" -> {
-                            root = FXMLLoader.load(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../sales_mng_dash/sales_mng_dash.fxml"));
+                            root = loader.load();
+                            Sales_mng_dashController saleMngController = loader.getController();
+                            saleMngController.setData(rs.getString("Staff_Name"), profileImage,rs.getString("Email"));
                         }
                         case "Manager" -> {//for inventory manager
                             //root = FXMLLoader.load(getClass().getResource("../Inventory_mng_dash/Inventory_mng_dash.fxml"));
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("../Inventory_mng_dash/Inventory_mng_dash.fxml"));
                             root = loader.load();
                             Inventory_mng_dashController invMngController = loader.getController();
-                            invMngController.setData(rs.getString("Staff_Name"), profileImage);
+                            invMngController.setData(rs.getString("Staff_Name"), profileImage,rs.getString("Email"));
                         }
                         case "Admin" -> {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("../IT_admin_dash/IT_admin_dash.fxml"));
                             root = loader.load();
                             IT_admin_dash_Controller adminController = loader.getController();
-                            adminController.setData(rs.getString("Staff_Name"), profileImage);
+                            adminController.setData(rs.getString("Staff_Name"), profileImage,rs.getString("Email"));
                         }
                         default -> {
 
@@ -121,7 +125,7 @@ public class login_controller implements Initializable {
                     stage.setScene(scene);
                     stage.show();
 
-                } else {
+                } else {//right email, wrong pass
                     //load alert pane
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
                     root = loader.load();
@@ -130,7 +134,7 @@ public class login_controller implements Initializable {
                     ac.SetContent("Invalid login details", root, stage);
                 }
 
-            } else {
+            } else {//wrong email and password
                 //load alert pane
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
                 root = loader.load();

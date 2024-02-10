@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,12 +60,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import javax.mail.Session;
 import model_classes.Product;
 import model_classes.Sale;
 import utility_classes.DatabaseConn;
+import utility_classes.EmailSending;
 import utility_classes.MyPrinter;
 import utility_classes.SwitchTabs;
-import utility_classes.ValidDate;
+import utility_classes.NotificationClass;
 
 public class Sales_person_dashController implements Initializable {
 
@@ -93,7 +96,7 @@ public class Sales_person_dashController implements Initializable {
     private TableView<Sale> NewSaleTable;
 
     //TOOLS FOR DATABASE
-    private Connection con;
+    private Connection con = DatabaseConn.connectDB();
     //private Statement statement;
     private PreparedStatement ps;
     private ResultSet result;
@@ -131,13 +134,16 @@ public class Sales_person_dashController implements Initializable {
     @FXML
     private VBox SalesTabPane;
 
+    private String myEmail;
+
     TableColumn<Sale, Void> colBtn = new TableColumn("");
 
     //load profile pic and username
-    public void setData(String name, Image pic, String staffID) {
+    public void setData(String name, Image pic, String staffID, String email) {
         userName.setText(name);
         profile_pic.setFill(new ImagePattern(pic));
         salesPersonID = staffID;
+        myEmail = email;
     }
 
     //FOR EACH PRODUCT CARD
@@ -159,10 +165,10 @@ public class Sales_person_dashController implements Initializable {
             Product allPSale;
 
             while (result.next()) {
-                System.out.println("product quantity "+result.getString("Product_Name")+" "+result.getInt("Quantity"));
+                System.out.println("product quantity " + result.getString("Product_Name") + " " + result.getInt("Quantity"));
                 java.sql.Blob columnValue = result.getBlob("Product_Photo");
 
-                Image image = new Image(getClass().getResource("../images/starfire.jpg").toExternalForm(), 150, 150, true, true);
+                Image image = new Image(getClass().getResource("../images/no-image-available-02.jpg").toExternalForm(), 150, 150, true, true);
                 if (columnValue != null) {
                     byte[] imageData = columnValue.getBytes(1, (int) columnValue.length());
                     image = new Image(new ByteArrayInputStream(imageData));
@@ -568,12 +574,13 @@ public class Sales_person_dashController implements Initializable {
 
                     prepare = con.prepareStatement("insert into sale_receipts values(?,?,?,?,?,?,?)");
                     prepare.setInt(1, receiptNo);
-                    //ps.setString(6, salesPersonID);
+                    
                     prepare.setString(2, s.getCode());
                     prepare.setString(3, s.getName());
                     prepare.setInt(4, s.getQuantity());
                     prepare.setInt(5, s.getPrice());
-                    prepare.setString(6, "001");
+                    prepare.setString(6, salesPersonID);
+                    //prepare.setString(6, "001");
                     prepare.setObject(7, LocalDateTime.now());
                     prepare.executeUpdate();
                 }
@@ -617,9 +624,13 @@ public class Sales_person_dashController implements Initializable {
                 Platform.runLater(() -> {
 
                     try {
-                        autoCompleteSearch();
+                        //autoCompleteSearch();
+                        NotifyExpiryDate();
+                        NotifyLowStock();
                     } catch (SQLException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 });
@@ -641,18 +652,48 @@ public class Sales_person_dashController implements Initializable {
                 });
                 Platform.runLater(() -> {
 
-//                    try {
-//                        // Update JavaFX UI components here
-//                        DisplayBirthdays();
-//                        // This code will run on the JavaFX Application Thread
-//                    } catch (SQLException | IOException ex) {
-//                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
+                    try {
+                        // Update JavaFX UI components here
+                        DisplayBirthdays();
+                        // This code will run on the JavaFX Application Thread
+                    } catch (SQLException | IOException ex) {
+                        Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                 });
             }
         };
         timer.schedule(task, 3000);// Schedule the task to run once after 3 seconds 
+    }
+
+    
+    public void NotifyLowStock() throws SQLException, IOException {
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+
+        root = loader.load();
+
+        AlertController ac = loader.getController();
+        String value= NotificationClass.LowStockLevels(myEmail);
+        if (value != null) {
+            ac.SetContent("Low stock levels: " + value, root, stage);
+        }
+    }
+
+    public void NotifyExpiryDate() throws SQLException, IOException {
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../components/alerts/alert.fxml"));
+        stage = (Stage) StackPane.getScene().getWindow();
+
+        root = loader.load();
+
+        AlertController ac = loader.getController();
+        String value= NotificationClass.isExpiryDate(myEmail);
+        if (value != null) {
+            ac.SetContent("These items are about to expire: " + value, root, stage);
+        }
+
     }
 
     public void DisplayBirthdays() throws SQLException, IOException {
@@ -663,8 +704,8 @@ public class Sales_person_dashController implements Initializable {
         root = loader.load();
 
         AlertController ac = loader.getController();
-        if (ValidDate.isBirthday() != null) {
-            ac.SetContent("Today's bday celebs: " + ValidDate.isBirthday(), root, stage);
+        if (NotificationClass.isBirthday(myEmail) != null) {
+            ac.SetContent("Today's bday celebs: " + NotificationClass.isBirthday(myEmail), root, stage);
         }
 
     }
@@ -679,8 +720,9 @@ public class Sales_person_dashController implements Initializable {
             acceptPayment();
             VBoxAddSale();
             SwitchTabs.switchTabs(sideBar, StackPane);
-           // UpdateUI();
-        } catch (SQLException ex) {
+            NotificationClass.InitialiseCounters();
+            UpdateUI();
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
