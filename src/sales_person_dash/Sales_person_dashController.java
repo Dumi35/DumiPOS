@@ -625,7 +625,6 @@ public class Sales_person_dashController implements Initializable {
 
                     try {
                         //autoCompleteSearch();
-                        NotifyExpiryDate();
                         NotifyLowStock();
                     } catch (SQLException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
@@ -655,6 +654,7 @@ public class Sales_person_dashController implements Initializable {
                     try {
                         // Update JavaFX UI components here
                         DisplayBirthdays();
+                        NotifyExpiryDate();
                         // This code will run on the JavaFX Application Thread
                     } catch (SQLException | IOException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);

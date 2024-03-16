@@ -210,11 +210,8 @@ public class Sales_mng_dashController implements Initializable {
                     try {
                         getTotalStats();
                         getTopSellingProducts();
-                        NotifyExpiryDate();
                     } catch (SQLException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(Sales_person_dashController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 });
@@ -239,6 +236,7 @@ public class Sales_mng_dashController implements Initializable {
                     try {
                         // Update JavaFX UI components here
                         DisplayBirthdays();
+                        NotifyExpiryDate();
                         // This code will run on the JavaFX Application Thread
                     } catch (SQLException | IOException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);

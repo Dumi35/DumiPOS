@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"components"},{"l":"components.alerts"},{"l":"dumi_pos_system"},{"l":"Inventory_mng_dash"},{"l":"IT_admin_dash"},{"l":"login"},{"l":"model_classes"},{"l":"sales_mng_dash"},{"l":"sales_person_dash"},{"l":"utility_classes"}];updateSearchResults();

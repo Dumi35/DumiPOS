@@ -164,7 +164,6 @@ public class Inventory_mng_dashController implements Initializable {
 
                     try {
                         ShowProductData();
-                        NotifyExpiryDate();
                         NotifyLowStock();
                     } catch (SQLException | IOException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,6 +191,8 @@ public class Inventory_mng_dashController implements Initializable {
                     try {
                         // Update JavaFX UI components here
                         DisplayBirthdays();
+                        NotifyExpiryDate();
+                        
                         // This code will run on the JavaFX Application Thread
                     } catch (SQLException | IOException ex) {
                         Logger.getLogger(Inventory_mng_dashController.class.getName()).log(Level.SEVERE, null, ex);

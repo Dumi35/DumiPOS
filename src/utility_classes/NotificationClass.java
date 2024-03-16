@@ -86,15 +86,13 @@ public class NotificationClass {
         while (result.next()) {
             expiringSoon.add(result.getString("Product_Name"));
         }
-        if (exp_prev_stock.equals(expiringSoon)) {
-            return null;
-        }
+        
         if (expiringSoon.isEmpty()) {
             return null;
         }
         //send email
         try {
-            //send email to each staff
+            //send email to staff
 
             String body = "These goods will expire soon " + convertArrayListToString(expiringSoon) + ".";
 
